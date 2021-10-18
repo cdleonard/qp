@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdbool.h>
-#include <linux/types.h>
 
 #define QP_PRINT_IMPL(...) buffer_print(&pb, str, ## __VA_ARGS__)
 #include <qp.h>
