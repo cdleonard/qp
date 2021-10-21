@@ -619,7 +619,7 @@ typedef unsigned long qp_militime_t;
             (h)->hop_limit, \
             QP_IPV6_ARG(&(h)->saddr), \
             QP_IPV6_ARG(&(h)->daddr)
-#define QP_DUMP_IPV6_HDR(h) QP_PRINT_LOC(QP_IPV6_HDR_FMT "\n", QP_IPV6_HDR_ARG(h))
+#define QP_DUMP_IPV6_HDR(h) QP_PRINT_LOC(QP_IPV6_HDR_FMT QP_NL, QP_IPV6_HDR_ARG(h))
 
 #define QP_DUMP_IPVX_HDR(h) do { \
         if (((struct iphdr*)(h))->version == 4) { \
