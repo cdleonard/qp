@@ -632,20 +632,20 @@ typedef unsigned long qp_militime_t;
     } while(0)
 
 #define QP_UDP_HDR_FMT \
-            "udphdr=%p sport=%hu dport=%hu len=%hu csum=%hu\n"
+            "udphdr=%p sport=%hu dport=%hu len=%hu csum=%hu"
 
 #define QP_UDP_HDR_ARG(h) \
             (h), \
             ntohs((h)->source), ntohs((h)->dest), \
             ntohl((h)->len), ntohl((h)->check)
 
-#define QP_DUMP_UDP_HDR(h) QP_PRINT_LOC(QP_UDP_HDR_FMT, QP_UDP_HDR_ARG(h))
+#define QP_DUMP_UDP_HDR(h) QP_PRINT_LOC(QP_UDP_HDR_FMT QP_NL, QP_UDP_HDR_ARG(h))
 
 #define QP_TCP_HDR_FMT \
             "tcphdr=%p sport=%hu dport=%hu" \
             " seq=%u ack=%u doff=%u" \
             " flags=%04hx%s%s%s%s%s%s" \
-            " win=%u csum=%04hx urg=%hu\n"
+            " win=%u csum=%04hx urg=%hu"
 
 #define QP_TCP_HDR_ARG(h) \
             (h), ntohs((h)->source), ntohs((h)->dest), \
@@ -660,7 +660,7 @@ typedef unsigned long qp_militime_t;
             (h)->urg ? " URG" : "", \
             (h)->window, ntohs((h)->check), ntohs((h)->urg)
 
-#define QP_DUMP_TCP_HDR(h) QP_PRINT_LOC(QP_TCP_HDR_FMT, QP_TCP_HDR_ARG(h))
+#define QP_DUMP_TCP_HDR(h) QP_PRINT_LOC(QP_TCP_HDR_FMT QP_NL, QP_TCP_HDR_ARG(h))
 
 #define QP__VALUE_MASK_ARG(val, mask) \
             ((val) & (mask) ? " "#mask : "")
