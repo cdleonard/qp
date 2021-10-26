@@ -665,6 +665,57 @@ typedef unsigned long qp_militime_t;
 #define QP__VALUE_MASK_ARG(val, mask) \
             ((val) & (mask) ? " "#mask : "")
 
+/* Try to print addressing information from struct sock *sk */
+#define QP_PRINT_LINUX_SOCK_ADDR(sk) do { \
+        if ((sk)->sk_family == AF_INET) { \
+            if (!sk_fullsock(sk)) { \
+                QP_PRINT_LOC("sk=%px TCPv4 minisock sk_state=%d" \
+                        "saddr=%pI4:%hu daddr=%pI4:%hu\n", \
+                        (sk), (sk)->sk_state, \
+                        &(sk)->sk_rcv_saddr, (sk)->sk_num, \
+                        &(sk)->sk_daddr, ntohs((sk)->sk_dport)); \
+            } else if ((sk)->sk_protocol == IPPROTO_TCP && (sk)->sk_state == TCP_LISTEN) { \
+                QP_PRINT_LOC("sk=%px TCPv4 LISTEN %pI4:%hu\n", \
+                        (sk), &(sk)->sk_rcv_saddr, (sk)->sk_num); \
+            } else { \
+                QP_PRINT_LOC("sk=%px IPv4 sk_state=%d sk_protocol=%04hx sk_type=%04hx" \
+                        "saddr=%pI4:%hu daddr=%pI4:%hu\n", \
+                        (sk), (sk)->sk_state, \
+                        (sk)->sk_protocol, (sk)->sk_type, \
+                        &(sk)->sk_rcv_saddr, (sk)->sk_num, \
+                        &(sk)->sk_daddr, ntohs((sk)->sk_dport)); \
+            } \
+        } else if ((sk)->sk_family == AF_INET6) { \
+            if (!sk_fullsock(sk)) { \
+                QP_PRINT_LOC("sk=%px TCPv6 minisock sk_state=%d" \
+                        " saddr=%pI6:%hu daddr=%pI6:%hu\n", \
+                        (sk), (sk)->sk_state, \
+                        &(sk)->sk_v6_rcv_saddr, (sk)->sk_num, \
+                        &(sk)->sk_v6_daddr, ntohs((sk)->sk_dport)); \
+            } else if ((sk)->sk_protocol == IPPROTO_TCP && (sk)->sk_state == TCP_LISTEN) { \
+                QP_PRINT_LOC("sk=%px TCPv6 LISTEN %pI6:%hu\n", \
+                        (sk), &(sk)->sk_v6_rcv_saddr, (sk)->sk_num); \
+            } else { \
+                QP_PRINT_LOC("sk=%px IPv6 sk_state=%d sk_protocol=%04hx sk_type=%04hx" \
+                        " saddr=%pI6:%hu daddr=%pI6:%hu\n", \
+                        (sk), (sk)->sk_state, \
+                        (sk)->sk_protocol, (sk)->sk_type, \
+                        &(sk)->sk_v6_rcv_saddr, (sk)->sk_num, \
+                        &(sk)->sk_v6_daddr, ntohs((sk)->sk_dport)); \
+            } \
+        } else if (sk_fullsock(sk)) { \
+            /* TCP minisocks do not have sk_protocol sk_type */ \
+            QP_PRINT_LOC("sk=%px family=%04hx sk_state=%d" \
+                    " sk_protocol=%04hx sk_type=%04hx sk_num=%hu\n", \
+                    (sk), (sk)->sk_family, (sk)->sk_state, \
+                    (sk)->sk_protocol, (sk)->sk_type, (sk)->sk_num); \
+        } else { \
+            /* minisocks should be IPv4 or IPv6 */ \
+            QP_PRINT_LOC("sk=%px family=%04hx sk_state=%d unexpected minisock\n", \
+                    (sk), (sk)->sk_family, (sk)->sk_state); \
+        } \
+    } while (0)
+
 #define QP_DUMP_SOCKADDR_LL(a) do { \
         unsigned int addr_index; \
         QP_PRINT_LOC( \
