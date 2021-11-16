@@ -1,0 +1,22 @@
+#
+# Doxyfile for QP
+#
+# Only modified config values are included together with an explanation why.
+# Doxygen config documentation is here: https://www.doxygen.nl/manual/config.html
+#
+
+PROJECT_NAME=QP
+
+GENERATE_TREEVIEW=YES
+
+# Single file
+INPUT=qp.h
+
+# Show everything, even when documentation is lacked
+EXTRACT_ALL=YES
+
+# Show in declaration order
+SORT_MEMBER_DOCS=NO
+
+# First sentence of command is the "brief"
+JAVADOC_AUTOBRIEF=YES
