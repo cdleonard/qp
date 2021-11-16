@@ -43,6 +43,9 @@
     #define QP_NL "\n"
 #endif
 
+#define QP_PRINT_IMPL_NULL(str, ...) do { \
+    } while (0)
+
 #define QP_PRINT_IMPL_PRINTF(str, ...) do { \
         printf(str, ## __VA_ARGS__); \
     } while (0)
