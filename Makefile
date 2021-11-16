@@ -1,12 +1,13 @@
 CFLAGS=-Wall -g -I.
 CC=gcc
 
-all: check
+all: check docs
 
 .PHONY: \
 	all \
-	clean \
 	check \
+	clean \
+	docs \
 
 test: test.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $@ \
@@ -17,3 +18,6 @@ clean:
 
 check: test
 	./test
+
+docs:
+	doxygen
