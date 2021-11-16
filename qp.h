@@ -1,6 +1,17 @@
 #ifndef QP_HEADER_INCLUDED
 #define QP_HEADER_INCLUDED
 
+/** \file qp.h
+ *
+ *  QP: Quick Print library
+ */
+
+/** \mainpage
+ *
+ *  See \ref qp.h
+ */
+
+/** Default interval (in miliseconds) for rate-limited prints */
 #ifndef QP_RATELIMIT_INTERVAL
     #define QP_RATELIMIT_INTERVAL 1000
 #endif
@@ -23,9 +34,10 @@
     #endif
 #endif
 
-/*
- * Newline used for some of the prints.
- * Define this to "" if the QP_PRINT for the current file handles newlines internally.
+/**
+ * End-of-line terminator.
+ *
+ * This can be defined to "" if QP_PRINT handles newlines internally.
  */
 #ifndef QP_NL
     #define QP_NL "\n"
@@ -51,11 +63,20 @@
         } \
     } while (0)
 
+/** Print implementation using standard linux printk */
 #define QP_PRINT_IMPL_LINUX_KERNEL(str, ...) printk(str, ## __VA_ARGS__)
+/** Print implementation using linux trace_printk */
 #define QP_PRINT_IMPL_LINUX_KERNEL_TRACE(str, ...) trace_printk(str, ## __VA_ARGS__)
 #define QP_PRINT_IMPL_LINUX_KERNEL_EARLY(str, ...) early_printk(str, ## __VA_ARGS__)
 
-/* Print stuff: */
+/** Main print function
+ *
+ * By default this is defined to either QP_PRINT_IMPL_STDERR or
+ * QP_PRINT_IMPL_LINUX_KERNEL.
+ *
+ * This can be overriden by explicitly defining QP_PRINT to one of the
+ * QP_PRINT_IMPL functions before including qp.h
+ */
 #ifdef QP_PRINT
     /* external */
 
@@ -71,7 +92,7 @@
 #define QP_TIME_HEADER_4_3 1
 #define QP_TIME_HEADER_5_6 2
 
-/* Nothing by default */
+/** Header timing configuration */
 #ifndef QP_TIME_HEADER
     #define QP_TIME_HEADER QP_TIME_HEADER_NONE
 #endif
@@ -98,11 +119,10 @@
                     __FUNCTION__, __LINE__, ## __VA_ARGS__)
 #endif
 
-/* Tracing (printing location without a message). */
+/** Print source code location without any other message. */
 #define QP_TRACE() QP_PRINT_LOC("trace" QP_NL)
 
-/** Execute-once support
- */
+/** Macro which evaluates as true only once it it's scope (not thread-safe). */
 #define QP_ONCE() ({ \
             static int once_called; \
             int r = once_called; \
@@ -218,9 +238,11 @@ typedef unsigned long qp_militime_t;
     })
 #endif
 
-/* Rate limiting. No burst!
+/** Rate limiter which evaluates as "true" once every "delta" miliseconds.
  *
- * Returns 0 or miliseconds passed.
+ * Rate limitation is separate for each scope using this macro.
+ *
+ * Returns 0 or number miliseconds passed.
  */
 #define QP_RATELIMIT(delta) ({ \
             static qp_militime_t g_last_time; \
@@ -242,7 +264,7 @@ typedef unsigned long qp_militime_t;
             ret; \
         })
 
-/* Count calls to this location: */
+/** Count calls to this location. */
 #define QP_PRINT_RATELIMIT(str, ...) do { \
         static unsigned long long g_cnt = 0; \
         static unsigned long long g_last_cnt; \
@@ -283,7 +305,7 @@ typedef unsigned long qp_militime_t;
             delta_ms; \
         })
 
-/* Count calls to this location: */
+/** Count calls to this location on a per-cpu basis. */
 #define QP_PRINT_RATELIMIT_PERCPU(str, ...) do { \
         static QP_DEFINE_PER_CPU(unsigned long long, g_cnt); \
         static QP_DEFINE_PER_CPU(unsigned long long, g_last_cnt); \
