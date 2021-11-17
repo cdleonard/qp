@@ -3,7 +3,27 @@
 
 /** \file qp.h
  *
- *  QP: Quick Print library
+ * \brief QP: Quick Print library.
+ *
+ * This is a header-only library intended to be quickly dropped into a project
+ * in order to show useful prints without relying on whatever logging library is
+ * already in place.
+ *
+ * For that purpose this library has it's own implementation of "file:line"
+ * headers, timestamps and ratelimiting.
+ *
+ * Minimal configuration is supported by defining certain macros before
+ * including "qp.h". For example if "QP_RATELIMIT_INTERVAL" is already defined
+ * then that value is used instead of the default.
+ *
+ * The following macros are useful to define ahead of time:
+ * - #QP_PRINT: This should be printf-like function that shows output somewhere useful
+ * - #QP_NL: If the underlying logging mechanism inserts newlines by itself this
+ *      should be defined to "".
+ * - #QP_RATELIMIT_INTERVAL
+ * - #QP_TIME_HEADER
+ * - #qp_militime_now
+ * - #qp_nanotime_now
  */
 
 /** \mainpage
@@ -43,21 +63,33 @@
     #define QP_NL "\n"
 #endif
 
+/** Print implementation without any output.
+ *
+ * This can be used to quickly silence prints inside a translation unit.
+ */
 #define QP_PRINT_IMPL_NULL(str, ...) do { \
     } while (0)
 
+/** Print implementation using a default printf */
 #define QP_PRINT_IMPL_PRINTF(str, ...) do { \
         printf(str, ## __VA_ARGS__); \
     } while (0)
 
+/** Print implementation using stderr (userspace default) */
 #define QP_PRINT_IMPL_STDERR(str, ...) do { \
         fprintf(stderr, str, ## __VA_ARGS__); \
     } while (0)
 
+/** Print implementation using stdout */
 #define QP_PRINT_IMPL_STDOUT(str, ...) do { \
         fprintf(stdout, str, ## __VA_ARGS__); \
     } while (0)
 
+/** Print implementation using /dev/console device
+ *
+ * This will result in userspace output being combined with that of the kernel.
+ * The /dev/console device is opened and close for each print statement.
+ */
 #define QP_PRINT_IMPL_DEV_CONSOLE(str, ...) do { \
         FILE *fp = fopen("/dev/console", "a"); \
         if (fp) { \
@@ -70,12 +102,13 @@
 #define QP_PRINT_IMPL_LINUX_KERNEL(str, ...) printk(str, ## __VA_ARGS__)
 /** Print implementation using linux trace_printk */
 #define QP_PRINT_IMPL_LINUX_KERNEL_TRACE(str, ...) trace_printk(str, ## __VA_ARGS__)
+/** Print implementation using linux early_printk */
 #define QP_PRINT_IMPL_LINUX_KERNEL_EARLY(str, ...) early_printk(str, ## __VA_ARGS__)
 
 /** Main print function
  *
- * By default this is defined to either QP_PRINT_IMPL_STDERR or
- * QP_PRINT_IMPL_LINUX_KERNEL.
+ * By default this is defined to either #QP_PRINT_IMPL_STDERR or
+ * #QP_PRINT_IMPL_LINUX_KERNEL.
  *
  * This can be overriden by explicitly defining QP_PRINT to one of the
  * QP_PRINT_IMPL functions before including qp.h
