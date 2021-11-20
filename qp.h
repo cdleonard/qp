@@ -870,10 +870,4 @@ typedef unsigned long qp_militime_t;
 
 #define QP_UNOPTIMIZED __attribute__((__optimize__(0)))
 
-#define QP_TAP_ASSERT_MSG(expr, msg, ...) \
-            QP_PRINT("%sok - " msg, (expr) ? " " : "not ", ## __VA_ARGS__)
-
-#define QP_TAP_ASSERT(expr) \
-            QP_TAP_ASSERT_MSG(expr, #expr)
-
 #endif // QP_HEADER_INCLUDED
