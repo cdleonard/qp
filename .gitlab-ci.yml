@@ -24,3 +24,17 @@ docs:
     expose_as: docs
     paths:
       - html
+
+pages:
+  stage: deploy
+  before_script: []
+  dependencies:
+    - docs
+  script:
+    - mkdir -p public
+    - mv html public/doxygen-html/
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
