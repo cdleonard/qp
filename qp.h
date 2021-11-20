@@ -26,11 +26,6 @@
  * - #qp_nanotime_now
  */
 
-/** \mainpage
- *
- *  See \ref qp.h
- */
-
 /** Default interval (in miliseconds) for rate-limited prints */
 #ifndef QP_RATELIMIT_INTERVAL
     #define QP_RATELIMIT_INTERVAL 1000
