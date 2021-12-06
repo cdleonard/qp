@@ -58,6 +58,19 @@
     #define QP_NL "\n"
 #endif
 
+/** Continuation marker.
+ *
+ * This is inserted at the start of QP_PRINT calls in order to avoid starting on
+ * a newline. It is empty by default.
+ */
+#ifndef QP_CONT
+    #if defined(QP_PROJECT_LINUX_KERNEL)
+        #define QP_CONT KERN_CONT
+    #else
+        #define QP_CONT ""
+    #endif
+#endif
+
 /** Print implementation without any output.
  *
  * This can be used to quickly silence prints inside a translation unit.
@@ -537,7 +550,7 @@ typedef unsigned long qp_militime_t;
 #define QP_DUMP_HEX_BYTES(buf, len) do { \
         unsigned int idx; \
         for (idx = 0; idx < len; ++idx) { \
-            QP_PRINT("%s%02x", (idx && (idx % 8) == 0) ? " " : "", (int)((unsigned char*)buf)[idx]); \
+            QP_PRINT(QP_CONT "%s%02x", (idx && (idx % 8) == 0) ? " " : "", (int)((unsigned char*)buf)[idx]); \
         } \
     } while (0)
 
@@ -547,12 +560,11 @@ typedef unsigned long qp_militime_t;
         QP_PRINT_LOC("DUMP %u bytes from %p:", (unsigned int)(len), (buf)); \
         for (idx = 0; idx < (unsigned int)(len); ++idx) { \
             if (idx % 16 == 0) { \
-                QP_PRINT("\n"); \
-                QP_PRINT_LOC("DUMP %p:", ((unsigned char*)(buf)) + idx); \
+                QP_PRINT(QP_CONT "\nDUMP %p:", ((unsigned char*)(buf)) + idx); \
             } \
-            QP_PRINT("%s%02x", ((idx % 8) == 0) ? "  " : " ", (int)((unsigned char*)(buf))[idx]); \
+            QP_PRINT(QP_CONT "%s%02x", ((idx % 8) == 0) ? "  " : " ", (int)((unsigned char*)(buf))[idx]); \
         } \
-        QP_PRINT("\n"); \
+        QP_PRINT(QP_CONT "\n"); \
     } while (0)
 
 /** Dump struct msghdr and iov pointers
