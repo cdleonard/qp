@@ -533,7 +533,7 @@ typedef unsigned long qp_militime_t;
         } \
     } while (0)
 
-/* Dump raw hex. No EOL */
+/** Dump raw hex inline: no EOL, just space separator every 8 bytes */
 #define QP_DUMP_HEX_BYTES(buf, len) do { \
         unsigned int idx; \
         for (idx = 0; idx < len; ++idx) { \
@@ -541,6 +541,7 @@ typedef unsigned long qp_militime_t;
         } \
     } while (0)
 
+/** Dump a hex buffer nicely with a header and up to 16 bytes per line */
 #define QP_DUMP_HEX_BUFFER(buf, len) do { \
         unsigned int idx; \
         QP_PRINT_LOC("DUMP %u bytes from %p:", (unsigned int)(len), (buf)); \
