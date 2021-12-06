@@ -555,6 +555,11 @@ typedef unsigned long qp_militime_t;
         QP_PRINT("\n"); \
     } while (0)
 
+/** Dump struct msghdr and iov pointers
+ *
+ * This includes all fields in struct msghdr and each struct iovec but not the
+ * actual contents of the iovec buffers.
+ */
 #define QP_DUMP_MSGHDR(msg) do { \
         unsigned int idx; \
         QP_PRINT_LOC("(msg)=%p flags=0x%x" \
