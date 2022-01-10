@@ -741,7 +741,7 @@ typedef unsigned long qp_militime_t;
         if ((sk)->sk_family == AF_INET) { \
             if (!sk_fullsock(sk)) { \
                 QP_PRINT_LOC("sk=%px TCPv4 minisock sk_state=%d" \
-                        "saddr=%pI4:%hu daddr=%pI4:%hu\n", \
+                        " saddr=%pI4:%hu daddr=%pI4:%hu\n", \
                         (sk), (sk)->sk_state, \
                         &(sk)->sk_rcv_saddr, (sk)->sk_num, \
                         &(sk)->sk_daddr, ntohs((sk)->sk_dport)); \
@@ -750,7 +750,7 @@ typedef unsigned long qp_militime_t;
                         (sk), &(sk)->sk_rcv_saddr, (sk)->sk_num); \
             } else { \
                 QP_PRINT_LOC("sk=%px IPv4 sk_state=%d sk_protocol=%04hx sk_type=%04hx" \
-                        "saddr=%pI4:%hu daddr=%pI4:%hu\n", \
+                        " saddr=%pI4:%hu daddr=%pI4:%hu\n", \
                         (sk), (sk)->sk_state, \
                         (sk)->sk_protocol, (sk)->sk_type, \
                         &(sk)->sk_rcv_saddr, (sk)->sk_num, \
