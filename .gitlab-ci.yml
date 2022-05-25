@@ -2,22 +2,15 @@
 ---
 image: ubuntu
 
+before_script:
+  - apt-get update
+  - DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends $(cat apt-requirements.txt)
+
 test:
-  before_script:
-    - apt-get update
-    - DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends
-        check
-        pkg-config
-        libc-dev
-        make
-        gcc
   script:
     - make test
 
 docs:
-  before_script:
-    - apt-get update
-    - DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends doxygen
   script:
     - doxygen
   artifacts:
