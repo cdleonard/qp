@@ -1,13 +1,14 @@
 #include <check.h>
-#include <stdio.h>
 #include <stdarg.h>
 #include <stdbool.h>
+#include <stdio.h>
 
-#define QP_PRINT(str, ...) buffer_print(&pb, str, ## __VA_ARGS__)
+#define QP_PRINT(str, ...) buffer_print(&pb, str, ##__VA_ARGS__)
 #include <qp.h>
 
 #define PRINT_BUFFER_SIZE 1234
-struct print_buffer {
+struct print_buffer
+{
     char buf[PRINT_BUFFER_SIZE];
     char *curptr;
 };
@@ -34,7 +35,7 @@ int buffer_print(struct print_buffer *pb, const char *fmt, ...)
 
 START_TEST(test_dump_mac)
 {
-    uint8_t mac[6] = {0x02, 0x03, 0x04, 0x05, 0x06, 0x07 };
+    uint8_t mac[6] = {0x02, 0x03, 0x04, 0x05, 0x06, 0x07};
     struct print_buffer pb;
 
     print_buffer_init(&pb);
@@ -55,7 +56,7 @@ START_TEST(test_run_system)
 }
 END_TEST
 
-Suite* main_suite(void)
+Suite *main_suite(void)
 {
     Suite *s = suite_create("main");
     TCase *tc = tcase_create("main");
