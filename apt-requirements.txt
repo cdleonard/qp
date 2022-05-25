@@ -1,6 +1,7 @@
 check
 doxygen
 gcc
+graphviz
 libc-dev
 make
 pkg-config
