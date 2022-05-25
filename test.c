@@ -43,12 +43,25 @@ START_TEST(test_dump_mac)
 }
 END_TEST
 
+START_TEST(test_run_system)
+{
+    struct print_buffer pb;
+
+    print_buffer_init(&pb);
+    QP_RUN_SYSTEM("echo $(( 123 + 456 ))");
+    fprintf(stderr, "output:\n%s", pb.buf);
+    ck_assert(strstr(pb.buf, "RUN: echo $(( 123 + 456 ))\n"));
+    ck_assert(strstr(pb.buf, "579\n"));
+}
+END_TEST
+
 Suite* main_suite(void)
 {
     Suite *s = suite_create("main");
     TCase *tc = tcase_create("main");
 
     tcase_add_test(tc, test_dump_mac);
+    tcase_add_test(tc, test_run_system);
     suite_add_tcase(s, tc);
 
     return s;
