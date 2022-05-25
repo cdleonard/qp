@@ -1,0 +1,6 @@
+check
+doxygen
+gcc
+libc-dev
+make
+pkg-config
