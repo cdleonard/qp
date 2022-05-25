@@ -3,7 +3,7 @@
 #include <stdarg.h>
 #include <stdbool.h>
 
-#define QP_PRINT_IMPL(...) buffer_print(&pb, str, ## __VA_ARGS__)
+#define QP_PRINT(str, ...) buffer_print(&pb, str, ## __VA_ARGS__)
 #include <qp.h>
 
 #define PRINT_BUFFER_SIZE 1234
@@ -36,10 +36,22 @@ START_TEST(test_dump_mac)
 {
     uint8_t mac[6] = {0x02, 0x03, 0x04, 0x05, 0x06, 0x07 };
     struct print_buffer pb;
-    
+
     print_buffer_init(&pb);
     QP_DUMP_MAC(mac);
-    ck_assert(strcmp(pb.buf, "02:03:04:05:06:07"));
+    ck_assert(strstr(pb.buf, "02:03:04:05:06:07"));
+}
+END_TEST
+
+START_TEST(test_run_system)
+{
+    struct print_buffer pb;
+
+    print_buffer_init(&pb);
+    QP_RUN_SYSTEM("echo $(( 123 + 456 ))");
+    fprintf(stderr, "output:\n%s", pb.buf);
+    ck_assert(strstr(pb.buf, "RUN: echo $(( 123 + 456 ))\n"));
+    ck_assert(strstr(pb.buf, "579\n"));
 }
 END_TEST
 
@@ -49,6 +61,7 @@ Suite* main_suite(void)
     TCase *tc = tcase_create("main");
 
     tcase_add_test(tc, test_dump_mac);
+    tcase_add_test(tc, test_run_system);
     suite_add_tcase(s, tc);
 
     return s;
@@ -68,4 +81,3 @@ int main(void)
 
     return !!ntests_failed;
 }
-

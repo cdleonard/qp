@@ -883,4 +883,35 @@ typedef unsigned long qp_militime_t;
 
 #define QP_UNOPTIMIZED __attribute__((__optimize__(0)))
 
+/** Run a system command (like system(2)) and print output through QP_PRINT
+ *
+ * This is allows easy capturing of output inside projects that log somewhere
+ * other than stdout/stderr. It is based on popen and fgets.
+ */
+#define QP_RUN_SYSTEM(cmd) ({ \
+        FILE *fp; \
+        char buf[1024]; \
+        char *fgets_result; \
+        int ret; \
+        fp = popen(cmd, "r"); \
+        QP_PRINT_LOC("RUN: %s" QP_NL, cmd); \
+        while (true) {\
+            fgets_result = fgets(buf, sizeof(buf), fp); \
+            if (fgets_result != NULL) { \
+                QP_PRINT("%s", buf); \
+            } else { \
+                ret = ferror(fp); \
+                if (ret) { \
+                    QP_PRINT_LOC("ferror result: %d" QP_NL, ret); \
+                } \
+                break; \
+            } \
+        } \
+        ret = pclose(fp); \
+        if (ret) { \
+            QP_PRINT_LOC("pclose result: %d" QP_NL, ret); \
+        } \
+        ret; \
+    })
+
 #endif // QP_HEADER_INCLUDED
