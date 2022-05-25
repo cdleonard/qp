@@ -3,7 +3,7 @@
 #include <stdarg.h>
 #include <stdbool.h>
 
-#define QP_PRINT_IMPL(...) buffer_print(&pb, str, ## __VA_ARGS__)
+#define QP_PRINT(str, ...) buffer_print(&pb, str, ## __VA_ARGS__)
 #include <qp.h>
 
 #define PRINT_BUFFER_SIZE 1234
@@ -39,7 +39,7 @@ START_TEST(test_dump_mac)
     
     print_buffer_init(&pb);
     QP_DUMP_MAC(mac);
-    ck_assert(strcmp(pb.buf, "02:03:04:05:06:07"));
+    ck_assert(strstr(pb.buf, "02:03:04:05:06:07"));
 }
 END_TEST
 
