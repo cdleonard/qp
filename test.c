@@ -36,7 +36,7 @@ START_TEST(test_dump_mac)
 {
     uint8_t mac[6] = {0x02, 0x03, 0x04, 0x05, 0x06, 0x07 };
     struct print_buffer pb;
-    
+
     print_buffer_init(&pb);
     QP_DUMP_MAC(mac);
     ck_assert(strstr(pb.buf, "02:03:04:05:06:07"));
@@ -68,4 +68,3 @@ int main(void)
 
     return !!ntests_failed;
 }
-
