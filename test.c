@@ -56,6 +56,26 @@ START_TEST(test_run_system)
 }
 END_TEST
 
+START_TEST(test_run_system_print_exit_status)
+{
+    struct print_buffer pb;
+
+    print_buffer_init(&pb);
+    QP_RUN_SYSTEM("exit 3");
+    ck_assert(strstr(pb.buf, "exit status 3\n"));
+}
+END_TEST
+
+START_TEST(test_run_system_print_exit_signal)
+{
+    struct print_buffer pb;
+
+    print_buffer_init(&pb);
+    QP_RUN_SYSTEM("kill -6 $$");
+    ck_assert(strstr(pb.buf, "exit signal 6\n"));
+}
+END_TEST
+
 Suite *main_suite(void)
 {
     Suite *s = suite_create("main");
@@ -63,6 +83,8 @@ Suite *main_suite(void)
 
     tcase_add_test(tc, test_dump_mac);
     tcase_add_test(tc, test_run_system);
+    tcase_add_test(tc, test_run_system_print_exit_status);
+    tcase_add_test(tc, test_run_system_print_exit_signal);
     suite_add_tcase(s, tc);
 
     return s;

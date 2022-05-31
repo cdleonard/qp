@@ -908,8 +908,14 @@ typedef unsigned long qp_militime_t;
             } \
         } \
         ret = pclose(fp); \
-        if (ret) { \
-            QP_PRINT_LOC("pclose result: %d" QP_NL, ret); \
+        if (WIFEXITED(ret)) { \
+            QP_PRINT_LOC("exit status %d" QP_NL, WEXITSTATUS(ret)); \
+        } else if (WIFSIGNALED(ret)) { \
+            QP_PRINT_LOC("exit signal %d" QP_NL, WTERMSIG(ret)); \
+        } else { \
+            /* Something other than WIFEXITED WIFXSIGNALED should only happen \
+             * when explicitly requested by the parent. */ \
+            QP_PRINT_LOC("unexpected wait status 0x%x" QP_NL, ret); \
         } \
         ret; \
     })
