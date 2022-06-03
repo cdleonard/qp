@@ -1,4 +1,4 @@
-CFLAGS=-Wall -g -I.
+CFLAGS=-Wall -Werror -g -I.
 CC=gcc
 
 all: check docs
