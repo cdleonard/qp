@@ -540,7 +540,7 @@ typedef unsigned long qp_militime_t;
         } else if (__builtin_types_compatible_p(typeof(val), int)) { \
             QP_DUMP_VAR_FMT_VAL(var, "%d", (int)(val)); \
         } else if (__builtin_types_compatible_p(typeof(val), void*)) { \
-            QP_DUMP_VAR_FMT_VAL(var, "%px", (void*)(val)); \
+            QP_DUMP_VAR_FMT_VAL(var, "%px", (void*)(uintptr_t)(val)); \
         } else { \
             QP_PRINT_LOC("WTF is " #var "?" QP_NL); \
         } \
