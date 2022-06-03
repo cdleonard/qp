@@ -76,6 +76,31 @@ START_TEST(test_run_system_print_exit_signal)
 }
 END_TEST
 
+START_TEST(test_dump_var_int)
+{
+    struct print_buffer pb;
+    int x = 213451234;
+
+    print_buffer_init(&pb);
+    QP_DUMP_VAR(x);
+    ck_assert(strstr(pb.buf, "x=213451234\n"));
+}
+END_TEST
+
+START_TEST(test_dump_var_bool)
+{
+    struct print_buffer pb;
+    bool x = true;
+    bool y = false;
+
+    print_buffer_init(&pb);
+    QP_DUMP_VAR(x);
+    QP_DUMP_VAR(y);
+    ck_assert(strstr(pb.buf, "x=true\n"));
+    ck_assert(strstr(pb.buf, "y=false\n"));
+}
+END_TEST
+
 Suite *main_suite(void)
 {
     Suite *s = suite_create("main");
@@ -85,6 +110,8 @@ Suite *main_suite(void)
     tcase_add_test(tc, test_run_system);
     tcase_add_test(tc, test_run_system_print_exit_status);
     tcase_add_test(tc, test_run_system_print_exit_signal);
+    tcase_add_test(tc, test_dump_var_int);
+    tcase_add_test(tc, test_dump_var_bool);
     suite_add_tcase(s, tc);
 
     return s;
