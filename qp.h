@@ -851,14 +851,6 @@ typedef unsigned long qp_militime_t;
         optval; \
     })
 
-#define QP_IOCTL_INT(fd, type) ({ \
-        int value = 0; \
-        if (ioctl((fd), (type))) { \
-            value = -errno; \
-        } \
-        value; \
-    })
-
 #define QP_DUMP_SOCKOPT_INT(fd, level, optname) do { \
         int optval = QP_GETSOCKOPT_INT(fd, level, optname); \
         if (optval < 0) { \
