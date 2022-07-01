@@ -737,7 +737,7 @@ typedef unsigned long qp_militime_t;
             ((val) & (mask) ? " "#mask : "")
 
 /* Try to print addressing information from struct sock *sk */
-#define QP_PRINT_LINUX_SOCK_ADDR(sk) do { \
+#define QP_DUMP_LINUX_SOCK_ADDR(sk) do { \
         if ((sk)->sk_family == AF_INET) { \
             if (!sk_fullsock(sk)) { \
                 QP_PRINT_LOC("sk=%px TCPv4 minisock sk_state=%d" \
