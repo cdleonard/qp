@@ -2,6 +2,8 @@
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 #define QP_PRINT(str, ...) buffer_print(&pb, str, ##__VA_ARGS__)
 #include <qp.h>
@@ -76,6 +78,29 @@ START_TEST(test_run_system_print_exit_signal)
 }
 END_TEST
 
+START_TEST(test_dump_ipv4)
+{
+    struct print_buffer pb;
+    uint8_t ipv4[4] = {0x02, 0x03, 0x04, 0x05};
+
+    print_buffer_init(&pb);
+    QP_DUMP_IPV4_ADDR(ipv4);
+    ck_assert(strstr(pb.buf, "2.3.4.5\n"));
+}
+END_TEST
+
+START_TEST(test_dump_ipv6)
+{
+    struct print_buffer pb;
+    uint8_t ipv6[16];
+
+    inet_pton(AF_INET6, "2000::1234", ipv6);
+    print_buffer_init(&pb);
+    QP_DUMP_IPV6_ADDR(ipv6);
+    ck_assert(strstr(pb.buf, "2000:0000:0000:0000:0000:0000:0000:1234\n"));
+}
+END_TEST
+
 START_TEST(test_dump_var_int)
 {
     struct print_buffer pb;
@@ -110,6 +135,8 @@ Suite *main_suite(void)
     tcase_add_test(tc, test_run_system);
     tcase_add_test(tc, test_run_system_print_exit_status);
     tcase_add_test(tc, test_run_system_print_exit_signal);
+    tcase_add_test(tc, test_dump_ipv4);
+    tcase_add_test(tc, test_dump_ipv6);
     tcase_add_test(tc, test_dump_var_int);
     tcase_add_test(tc, test_dump_var_bool);
     suite_add_tcase(s, tc);
