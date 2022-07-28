@@ -601,12 +601,16 @@ typedef unsigned long qp_militime_t;
 #define QP_IPV4_ARG(x) \
         ((uint8_t *)(x))[0], ((uint8_t *)(x))[1], ((uint8_t *)(x))[2], ((uint8_t *)(x))[3]
 
+#define QP_DUMP_IPV4_ADDR(h) QP_PRINT_LOC(QP_IPV4_FMT "\n", QP_IPV4_ARG(h));
+
 #define QP_IPV6_FMT "%02hhx%02hhx:%02hhx%02hhx:%02hhx%02hhx:%02hhx%02hhx:%02hhx%02hhx:%02hhx%02hhx:%02hhx%02hhx:%02hhx%02hhx"
 #define QP_IPV6_ARG(x) \
         ((uint8_t *)(x))[ 0], ((uint8_t *)(x))[ 1], ((uint8_t *)(x))[ 2], ((uint8_t *)(x))[ 3], \
         ((uint8_t *)(x))[ 4], ((uint8_t *)(x))[ 5], ((uint8_t *)(x))[ 6], ((uint8_t *)(x))[ 7], \
         ((uint8_t *)(x))[ 8], ((uint8_t *)(x))[ 9], ((uint8_t *)(x))[10], ((uint8_t *)(x))[11], \
         ((uint8_t *)(x))[12], ((uint8_t *)(x))[13], ((uint8_t *)(x))[14], ((uint8_t *)(x))[15]
+
+#define QP_DUMP_IPV6_ADDR(h) QP_PRINT_LOC(QP_IPV6_FMT "\n", QP_IPV6_ARG(h));
 
 #define QP_POLL_EVENT_FMT "%x%s%s%s%s%s%s"
 #define QP_POLL_EVENT_ARG(x) \
