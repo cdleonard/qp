@@ -112,6 +112,17 @@ START_TEST(test_dump_var_int)
 }
 END_TEST
 
+START_TEST(test_dump_var_uint32_t)
+{
+    struct print_buffer pb;
+    uint32_t x = 4275878552;
+
+    print_buffer_init(&pb);
+    QP_DUMP_VAR(x);
+    ck_assert(strstr(pb.buf, "x=4275878552\n"));
+}
+END_TEST
+
 START_TEST(test_dump_var_bool)
 {
     struct print_buffer pb;
@@ -138,6 +149,7 @@ Suite *main_suite(void)
     tcase_add_test(tc, test_dump_ipv4);
     tcase_add_test(tc, test_dump_ipv6);
     tcase_add_test(tc, test_dump_var_int);
+    tcase_add_test(tc, test_dump_var_uint32_t);
     tcase_add_test(tc, test_dump_var_bool);
     suite_add_tcase(s, tc);
 

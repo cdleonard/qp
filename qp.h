@@ -539,6 +539,8 @@ typedef unsigned long qp_militime_t;
             QP_DUMP_VAR_FMT_VAL(var, "%s", ((bool)(val)) ? "true" : "false"); \
         } else if (__builtin_types_compatible_p(typeof(val), int)) { \
             QP_DUMP_VAR_FMT_VAL(var, "%d", (int)(val)); \
+        } else if (__builtin_types_compatible_p(typeof(val), unsigned int)) { \
+            QP_DUMP_VAR_FMT_VAL(var, "%u", (int)(val)); \
         } else if (__builtin_types_compatible_p(typeof(val), void*)) { \
             QP_DUMP_VAR_FMT_VAL(var, "%px", (void*)(uintptr_t)(val)); \
         } else { \
