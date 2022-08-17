@@ -13,11 +13,11 @@ GENERATE_TREEVIEW=YES
 # No latex
 GENERATE_LATEX=NO
 
-# Single-header fiel and README.md as main page
+# Single-header field and README.md as main page
 INPUT=qp.h README.md
 USE_MDFILE_AS_MAINPAGE=README.md
 
-# Show everything, even when documentation is lacked
+# Show everything, even when documentation is lacking
 EXTRACT_ALL=YES
 
 # Show in declaration order
