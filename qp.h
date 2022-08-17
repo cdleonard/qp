@@ -820,7 +820,7 @@ typedef unsigned long qp_militime_t;
         } \
     } while (0)
 
-/* Try to print addressing information from struct sock *sk */
+/** Try to print addressing information from struct sock *sk */
 #define QP_DUMP_LINUX_SOCK_ADDR(sk) do { \
         if ((sk)->sk_family == AF_INET) { \
             if (!sk_fullsock(sk)) { \
