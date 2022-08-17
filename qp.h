@@ -633,6 +633,45 @@ typedef unsigned long qp_militime_t;
         ((x) & POLLPRI) ? " POLLPRI" : "", \
         ((x) & POLLNVAL) ? " POLLNVAL" : ""
 
+/** Convert ethernet protocol number to string (like ETH_P_IP) */
+#define QP_ETHERPROTO_TO_STRING(x) ({ \
+        const char *str = "*unknown*"; \
+        switch ((x)) { \
+            case ETH_P_IP: str = "ETH_P_IPV4"; break; \
+            case ETH_P_IPV6: str = "ETH_P_IPV6"; break; \
+            case ETH_P_ARP: str = "ETH_P_ARG"; break; \
+        } \
+        str; \
+    })
+
+/** Convert ipv4/ipv6 protocol number to string (like IPPROTO_TCP) */
+#define QP_IPPROTO_TO_STRING(x) ({ \
+        const char *str = "*unknown*"; \
+        switch ((x)) { \
+            case IPPROTO_TCP: str = "IPPROTO_TCP"; break; \
+            case IPPROTO_UDP: str = "IPPROTO_UDP"; break; \
+            case IPPROTO_RAW: str = "IPPROTO_RAW"; break; \
+            case IPPROTO_ICMP: str = "IPPROTO_ICMP"; break; \
+            case IPPROTO_ESP: str = "IPPROTO_ESP"; break; \
+            case IPPROTO_AH: str = "IPPROTO_AH"; break; \
+        } \
+        str; \
+    })
+
+/** Convert unix sock_type to string (like SOCK_STREAN) */
+#define QP_SOCKTYPE_TO_STRING(x) ({ \
+        const char *str = "*unknown*"; \
+        switch ((x)) { \
+            case SOCK_STREAM: str = "SOCK_STREAM"; break; \
+            case SOCK_DGRAM: str = "SOCK_DGRAM"; break; \
+            case SOCK_SEQPACKET: str = "SOCK_SEQPACKET"; break; \
+            case SOCK_RAW: str = "SOCK_RAW"; break; \
+            case SOCK_PACKET: str = "SOCK_PACKET"; break; \
+        } \
+        str; \
+    })
+
+/** Convert unix address family to string (like AF_INET) */
 #define QP_ADDRFAM_TO_STRING(x) ({ \
         const char *str = "*unknown*"; \
         switch ((x)) { \
