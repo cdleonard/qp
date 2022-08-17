@@ -610,7 +610,10 @@ typedef unsigned long qp_militime_t;
 
 #define QP_IPV4_FMT "%hhu.%hhu.%hhu.%hhu"
 #define QP_IPV4_ARG(x) \
-        ((uint8_t *)(x))[0], ((uint8_t *)(x))[1], ((uint8_t *)(x))[2], ((uint8_t *)(x))[3]
+        ((uint8_t *)(x))[0], \
+        ((uint8_t *)(x))[1], \
+        ((uint8_t *)(x))[2], \
+        ((uint8_t *)(x))[3]
 
 #define QP_DUMP_IPV4_ADDR(h) QP_PRINT_LOC(QP_IPV4_FMT "\n", QP_IPV4_ARG(h));
 
