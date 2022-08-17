@@ -684,8 +684,6 @@ typedef unsigned long qp_militime_t;
         str; \
     })
 
-#define QP_FLAGSTR_ARG_PREFIX(x, prefix, flag) (((x) & prefix ## flag) ? " "#flag : "")
-
 #define QP_ETH_HDR_FMT "ethhdr=%p proto=%04hx dst_mac=" QP_MAC_FMT " src_mac=" QP_MAC_FMT
 #define QP_ETH_HDR_ARG(h) \
             (h), ntohs(((struct ethhdr*)(h))->h_proto), \
