@@ -28,6 +28,8 @@ Symlink `qp.h` to somewhere in your include path and `#include "qp.h"`
 Doxygen HTML is published on [gitlab pages](https://cdleonard.gitlab.io/qp/doxygen-html/qp_8h.html) and
 also [gitlab artifacts](https://gitlab.com/cdleonard/qp/-/jobs/artifacts/main/file/html/qp_8h.html?job=docs)
 
+Documentation can be build with `make docs`.
+
 ## Selftest
 
 Run `make check`.
