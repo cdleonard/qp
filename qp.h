@@ -787,6 +787,39 @@ typedef unsigned long qp_militime_t;
 #define QP__VALUE_MASK_ARG(val, mask) \
             ((val) & (mask) ? " "#mask : "")
 
+/** Try to type type information struct sock *sk
+ *
+ * This shows sk_family, sk_type and sk_protocol
+ */
+#define QP_DUMP_LINUX_SOCK_TYPE(sk) do {\
+        if (sk_fullsock(sk)) { \
+            QP_PRINT_LOC("sk=%p full" \
+                " family=%hu(%s)" \
+                " type=%hu(%s)" \
+                " protocol=%hu(%s)" \
+                " sk_state=%d" \
+                "%s", \
+                (sk), \
+                (sk)->sk_family, QP_ADDRFAM_TO_STRING((sk)->sk_family), \
+                (sk)->sk_type, QP_SOCKTYPE_TO_STRING((sk)->sk_type), \
+                (sk)->sk_protocol, \
+                (((sk)->sk_family == AF_INET || (sk)->sk_family == AF_INET6) \
+                    ? QP_IPPROTO_TO_STRING((sk)->sk_protocol) \
+                    : "*unknown*"), \
+                (sk)->sk_state, \
+                QP_NL); \
+        } else { \
+            QP_PRINT_LOC("sk=%p mini" \
+                " family=%hu(%s)" \
+                " sk_state=%d" \
+                "%s", \
+                (sk), \
+                (sk)->sk_family, QP_ADDRFAM_TO_STRING((sk)->sk_family), \
+                (sk)->sk_state, \
+                QP_NL); \
+        } \
+    } while (0)
+
 /* Try to print addressing information from struct sock *sk */
 #define QP_DUMP_LINUX_SOCK_ADDR(sk) do { \
         if ((sk)->sk_family == AF_INET) { \
