@@ -174,8 +174,17 @@
             !r; \
         })
 
-#define QP_PRINT_ONCE(...) do { if (QP_ONCE()) QP_PRINT(__VA_ARGS__); } while (0)
-#define QP_PRINT_LOC_ONCE(...) do { if (QP_ONCE()) QP_PRINT_LOC(__VA_ARGS__); } while (0)
+/** QP_PRINT but only once (based on #QP_ONCE) */
+#define QP_PRINT_ONCE(...) do { \
+        if (QP_ONCE()) \
+            QP_PRINT(__VA_ARGS__); \
+    } while (0)
+
+/** QP_PRINT_LOC but only once (based on #QP_ONCE) */
+#define QP_PRINT_LOC_ONCE(...) do { \
+        if (QP_ONCE()) \
+            QP_PRINT_LOC(__VA_ARGS__); \
+    } while (0)
 
 #ifdef QP_PROJECT_LINUX_KERNEL
     #if !defined(LINUX_VERSION_CODE)
