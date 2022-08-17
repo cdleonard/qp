@@ -606,7 +606,9 @@ typedef unsigned long qp_militime_t;
         ((uint8_t *)(x))[0], ((uint8_t *)(x))[1], ((uint8_t *)(x))[2], \
         ((uint8_t *)(x))[3], ((uint8_t *)(x))[4], ((uint8_t *)(x))[5]
 
-#define QP_DUMP_MAC(h) QP_PRINT_LOC(QP_MAC_FMT "\n", QP_MAC_ARG(h));
+#define QP_DUMP_MAC(h) \
+        QP_PRINT_LOC(QP_MAC_FMT QP_NL, \
+                QP_MAC_ARG(h))
 
 #define QP_IPV4_FMT "%hhu.%hhu.%hhu.%hhu"
 #define QP_IPV4_ARG(x) \
@@ -615,7 +617,9 @@ typedef unsigned long qp_militime_t;
         ((uint8_t *)(x))[2], \
         ((uint8_t *)(x))[3]
 
-#define QP_DUMP_IPV4_ADDR(h) QP_PRINT_LOC(QP_IPV4_FMT "\n", QP_IPV4_ARG(h));
+#define QP_DUMP_IPV4_ADDR(h) \
+        QP_PRINT_LOC(QP_IPV4_FMT QP_NL, \
+                QP_IPV4_ARG(h))
 
 #define QP_IPV6_FMT "%02hhx%02hhx:%02hhx%02hhx:%02hhx%02hhx:%02hhx%02hhx:%02hhx%02hhx:%02hhx%02hhx:%02hhx%02hhx:%02hhx%02hhx"
 #define QP_IPV6_ARG(x) \
@@ -624,7 +628,9 @@ typedef unsigned long qp_militime_t;
         ((uint8_t *)(x))[ 8], ((uint8_t *)(x))[ 9], ((uint8_t *)(x))[10], ((uint8_t *)(x))[11], \
         ((uint8_t *)(x))[12], ((uint8_t *)(x))[13], ((uint8_t *)(x))[14], ((uint8_t *)(x))[15]
 
-#define QP_DUMP_IPV6_ADDR(h) QP_PRINT_LOC(QP_IPV6_FMT "\n", QP_IPV6_ARG(h));
+#define QP_DUMP_IPV6_ADDR(h) \
+        QP_PRINT_LOC(QP_IPV6_FMT QP_NL, \
+                QP_IPV6_ARG(h))
 
 #define QP_POLL_EVENT_FMT "%x%s%s%s%s%s%s"
 #define QP_POLL_EVENT_ARG(x) \
@@ -692,7 +698,9 @@ typedef unsigned long qp_militime_t;
             (h), ntohs(((struct ethhdr*)(h))->h_proto), \
             QP_MAC_ARG(((struct ethhdr*)(h))->h_dest), \
             QP_MAC_ARG(((struct ethhdr*)(h))->h_source)
-#define QP_DUMP_ETH_HDR(h) QP_PRINT_LOC(QP_ETH_HDR_FMT "\n", QP_ETH_HDR_ARG(h));
+#define QP_DUMP_ETH_HDR(h) \
+        QP_PRINT_LOC(QP_ETH_HDR_FMT QP_NL, \
+                QP_ETH_HDR_ARG(h))
 
 #define QP_ARP_HDR_PFX_FMT "arphdr=%p htype=%02hx ptype=%02hx hlen=%hhu plen=%hhu oper=%02hx"
 #define QP_ARP_HDR_PFX_ARG(h) (h), ntohs((h)->ar_hrd), ntohs((h)->ar_pro), (h)->ar_hln, (h)->ar_pln, ntohs((h)->ar_op)
