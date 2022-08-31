@@ -137,6 +137,22 @@ START_TEST(test_dump_var_bool)
 }
 END_TEST
 
+START_TEST(test_dump_var_ptr)
+{
+    struct print_buffer pb;
+    char *x = (char*)0x12345678;
+
+    print_buffer_init(&pb);
+    ck_assert(QP_ARG_IS_POINTER((int*)0));
+    ck_assert(QP_ARG_IS_POINTER((void*)0));
+    ck_assert(QP_ARG_IS_POINTER((char*)0));
+    ck_assert(!QP_ARG_IS_POINTER(0));
+    ck_assert(!QP_ARG_IS_POINTER(0.0f));
+    QP_DUMP_VAR(x);
+    ck_assert(strstr(pb.buf, "x=0x12345678"));
+}
+END_TEST
+
 Suite *main_suite(void)
 {
     Suite *s = suite_create("main");
@@ -151,6 +167,7 @@ Suite *main_suite(void)
     tcase_add_test(tc, test_dump_var_int);
     tcase_add_test(tc, test_dump_var_uint32_t);
     tcase_add_test(tc, test_dump_var_bool);
+    tcase_add_test(tc, test_dump_var_ptr);
     suite_add_tcase(s, tc);
 
     return s;

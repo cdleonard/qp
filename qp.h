@@ -540,6 +540,9 @@ typedef unsigned long qp_militime_t;
 #define QP_DUMP_VAR_HEX64(var) QP_DUMP_VAR_FMT_VAL(var, "0x%016llx", (u64)var)
 #define QP_DUMP_VAR_HEX(var) QP_DUMP_VAR_FMT_VAL(var, "0x%08x", (u32)var)
 
+/** Check if argument is pointer (to anything) */
+#define QP_ARG_IS_POINTER(arg) (__builtin_classify_type(arg) == 5)
+
 #define QP_DUMP_VAR(var) do { \
         _Pragma("GCC diagnostic push"); \
         _Pragma("GCC diagnostic ignored \"-Wpointer-to-int-cast\""); \
@@ -551,8 +554,8 @@ typedef unsigned long qp_militime_t;
         } else if (__builtin_types_compatible_p(typeof(val), int)) { \
             QP_DUMP_VAR_FMT_VAL(var, "%d", (int)(val)); \
         } else if (__builtin_types_compatible_p(typeof(val), unsigned int)) { \
-            QP_DUMP_VAR_FMT_VAL(var, "%u", (int)(val)); \
-        } else if (__builtin_types_compatible_p(typeof(val), void*)) { \
+            QP_DUMP_VAR_FMT_VAL(var, "%u", (unsigned int)(val)); \
+        } else if (QP_ARG_IS_POINTER(val)) { \
             QP_DUMP_VAR_FMT_VAL(var, "%px", (void*)(uintptr_t)(val)); \
         } else { \
             QP_PRINT_LOC("WTF is " #var "?" QP_NL); \
