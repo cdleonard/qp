@@ -1,4 +1,4 @@
-CFLAGS=-Wall -Werror -g -I.
+CFLAGS=-Wall -Wdeclaration-after-statement -Werror -g -I.
 CC=gcc
 
 all: check docs
