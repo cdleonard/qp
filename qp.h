@@ -541,6 +541,8 @@ typedef unsigned long qp_militime_t;
 #define QP_DUMP_VAR_HEX(var) QP_DUMP_VAR_FMT_VAL(var, "0x%08x", (u32)var)
 
 #define QP_DUMP_VAR(var) do { \
+        _Pragma("GCC diagnostic push"); \
+        _Pragma("GCC diagnostic ignored \"-Wpointer-to-int-cast\""); \
         typeof(var) val = (var); \
         if (__builtin_types_compatible_p(typeof(val), uint64_t)) { \
             QP_DUMP_VAR_FMT_VAL(var, "%lld", *((uint64_t*)(&(val)))); \
@@ -555,6 +557,7 @@ typedef unsigned long qp_militime_t;
         } else { \
             QP_PRINT_LOC("WTF is " #var "?" QP_NL); \
         } \
+        _Pragma("GCC diagnostic pop"); \
     } while (0)
 
 /** Dump raw hex inline: no EOL, just space separator every 8 bytes */
