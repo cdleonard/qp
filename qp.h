@@ -544,9 +544,9 @@ typedef unsigned long qp_militime_t;
 #define QP_ARG_IS_POINTER(arg) (__builtin_classify_type(arg) == 5)
 
 #define QP_DUMP_VAR(var) do { \
+        typeof(var) val = (var); \
         _Pragma("GCC diagnostic push"); \
         _Pragma("GCC diagnostic ignored \"-Wpointer-to-int-cast\""); \
-        typeof(var) val = (var); \
         if (__builtin_types_compatible_p(typeof(val), uint64_t)) { \
             QP_DUMP_VAR_FMT_VAL(var, "%lld", *((uint64_t*)(&(val)))); \
         } else if (__builtin_types_compatible_p(typeof(val), bool)) { \
