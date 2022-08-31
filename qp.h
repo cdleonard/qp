@@ -147,7 +147,7 @@
             QP_PRINT("[%05lu.%06lu] %s(%d): " str, \
                     ((unsigned long)nanonow) / 1000000000 % 100000, \
                     ((unsigned long)nanonow) / 1000 % 1000000, \
-                    __FUNCTION__, __LINE__, ## __VA_ARGS__); \
+                    __func__, __LINE__, ## __VA_ARGS__); \
     } while (0)
 #elif QP_TIME_HEADER == QP_TIME_HEADER_4_3
     #define QP_PRINT_LOC(str, ...) do { \
@@ -155,12 +155,12 @@
             QP_PRINT("[%04lu.%03lu] %s(%d): " str, \
                     ((unsigned long)milinow) / 1000 % 10000, \
                     ((unsigned long)milinow) % 1000, \
-                    __FUNCTION__, __LINE__, ## __VA_ARGS__); \
+                    __func__, __LINE__, ## __VA_ARGS__); \
     } while (0)
 #else
     #define QP_PRINT_LOC(str, ...) \
             QP_PRINT("%s(%d): " str, \
-                    __FUNCTION__, __LINE__, ## __VA_ARGS__)
+                    __func__, __LINE__, ## __VA_ARGS__)
 #endif
 
 /** Print source code location without any other message. */
