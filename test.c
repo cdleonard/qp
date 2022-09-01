@@ -105,6 +105,9 @@ START_TEST(test_dump_var)
     struct print_buffer pb;
     int val_int = 213451234;
     uint32_t val_u32 = 4275878552;
+    unsigned char val_uchar = 254;
+    signed char val_schar = -126;
+    char val_char = 126;
     bool val_bool_true = true;
     bool val_bool_false = false;
 
@@ -117,6 +120,12 @@ START_TEST(test_dump_var)
     QP_DUMP_VAR(val_bool_false);
     ck_assert(strstr(pb.buf, "val_bool_true=true\n"));
     ck_assert(strstr(pb.buf, "val_bool_false=false\n"));
+    QP_DUMP_VAR(val_char);
+    QP_DUMP_VAR(val_schar);
+    QP_DUMP_VAR(val_uchar);
+    ck_assert(strstr(pb.buf, "val_char=126\n"));
+    ck_assert(strstr(pb.buf, "val_schar=-126\n"));
+    ck_assert(strstr(pb.buf, "val_uchar=254\n"));
 }
 END_TEST
 

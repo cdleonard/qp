@@ -555,6 +555,12 @@ typedef unsigned long qp_militime_t;
             QP_DUMP_VAR_FMT_VAL(var, "%d", (int)(val)); \
         } else if (__builtin_types_compatible_p(typeof(val), unsigned int)) { \
             QP_DUMP_VAR_FMT_VAL(var, "%u", (unsigned int)(val)); \
+        } else if (__builtin_types_compatible_p(typeof(val), char)) { \
+            QP_DUMP_VAR_FMT_VAL(var, "%hhd", (signed char)(val)); \
+        } else if (__builtin_types_compatible_p(typeof(val), signed char)) { \
+            QP_DUMP_VAR_FMT_VAL(var, "%hhd", (signed char)(val)); \
+        } else if (__builtin_types_compatible_p(typeof(val), unsigned char)) { \
+            QP_DUMP_VAR_FMT_VAL(var, "%hhu", (unsigned char)(val)); \
         } else if (QP_ARG_IS_POINTER(val)) { \
             QP_DUMP_VAR_FMT_VAL(var, "%px", (void*)(uintptr_t)(val)); \
         } else { \
