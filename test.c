@@ -100,39 +100,23 @@ START_TEST(test_dump_ipv6)
 }
 END_TEST
 
-START_TEST(test_dump_var_int)
+START_TEST(test_dump_var)
 {
     struct print_buffer pb;
-    int x = 213451234;
+    int val_int = 213451234;
+    uint32_t val_u32 = 4275878552;
+    bool val_bool_true = true;
+    bool val_bool_false = false;
 
     print_buffer_init(&pb);
-    QP_DUMP_VAR(x);
-    ck_assert(strstr(pb.buf, "x=213451234\n"));
-}
-END_TEST
-
-START_TEST(test_dump_var_uint32_t)
-{
-    struct print_buffer pb;
-    uint32_t x = 4275878552;
-
-    print_buffer_init(&pb);
-    QP_DUMP_VAR(x);
-    ck_assert(strstr(pb.buf, "x=4275878552\n"));
-}
-END_TEST
-
-START_TEST(test_dump_var_bool)
-{
-    struct print_buffer pb;
-    bool x = true;
-    bool y = false;
-
-    print_buffer_init(&pb);
-    QP_DUMP_VAR(x);
-    QP_DUMP_VAR(y);
-    ck_assert(strstr(pb.buf, "x=true\n"));
-    ck_assert(strstr(pb.buf, "y=false\n"));
+    QP_DUMP_VAR(val_int);
+    ck_assert(strstr(pb.buf, "val_int=213451234\n"));
+    QP_DUMP_VAR(val_u32);
+    ck_assert(strstr(pb.buf, "val_u32=4275878552\n"));
+    QP_DUMP_VAR(val_bool_true);
+    QP_DUMP_VAR(val_bool_false);
+    ck_assert(strstr(pb.buf, "val_bool_true=true\n"));
+    ck_assert(strstr(pb.buf, "val_bool_false=false\n"));
 }
 END_TEST
 
@@ -163,9 +147,7 @@ Suite *main_suite(void)
     tcase_add_test(tc, test_run_system_print_exit_signal);
     tcase_add_test(tc, test_dump_ipv4);
     tcase_add_test(tc, test_dump_ipv6);
-    tcase_add_test(tc, test_dump_var_int);
-    tcase_add_test(tc, test_dump_var_uint32_t);
-    tcase_add_test(tc, test_dump_var_bool);
+    tcase_add_test(tc, test_dump_var);
     tcase_add_test(tc, test_dump_var_ptr);
     suite_add_tcase(s, tc);
 
