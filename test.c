@@ -52,7 +52,6 @@ START_TEST(test_run_system)
 
     print_buffer_init(&pb);
     QP_RUN_SYSTEM("echo $(( 123 + 456 ))");
-    fprintf(stderr, "output:\n%s", pb.buf);
     ck_assert(strstr(pb.buf, "RUN: echo $(( 123 + 456 ))\n"));
     ck_assert(strstr(pb.buf, "579\n"));
 }
