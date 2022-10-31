@@ -1,0 +1,8 @@
+/*.cmd
+/html/
+/*.ko
+/modules.order
+/Module.symvers
+/qp_kmod_test.mod*
+/qp_kmod_test.o
+/test
