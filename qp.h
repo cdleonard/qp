@@ -658,7 +658,7 @@ typedef unsigned long qp_militime_t;
 #define QP_ETHERPROTO_TO_STRING(x) ({ \
         const char *str = "*unknown*"; \
         switch ((x)) { \
-            case ETH_P_IP: str = "ETH_P_IPV4"; break; \
+            case ETH_P_IP: str = "ETH_P_IP"; break; \
             case ETH_P_IPV6: str = "ETH_P_IPV6"; break; \
             case ETH_P_ARP: str = "ETH_P_ARG"; break; \
         } \
