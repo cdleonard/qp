@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // https://code.visualstudio.com/docs/cpp/launch-json-reference
+            "name": "debug ./test",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/test",
+            "environment": [
+                {
+                    "name": "CK_FORK",
+                    "value": "no"
+                }
+            ],
+            "cwd": ".",
+        },
+    ]
+}
