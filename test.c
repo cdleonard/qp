@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <linux/udp.h>
 
 #define QP_PRINT(str, ...) buffer_print(&pb, str, ##__VA_ARGS__)
 #include <qp.h>
@@ -145,6 +146,22 @@ START_TEST(test_dump_var_ptr)
 }
 END_TEST
 
+START_TEST(test_dump_udphdr)
+{
+    struct print_buffer pb;
+    struct udphdr h = {
+        .source = htons(53),
+        .dest = htons(4343),
+        .len = htons(128),
+        .check = htons(0x5678),
+    };
+
+    print_buffer_init(&pb);
+    QP_DUMP_UDP_HDR(&h);
+    ck_assert(strstr(pb.buf, "sport=53 dport=4343 len=128 csum=0x5678"));
+}
+END_TEST
+
 Suite *main_suite(void)
 {
     Suite *s = suite_create("main");
@@ -158,6 +175,7 @@ Suite *main_suite(void)
     tcase_add_test(tc, test_dump_ipv6);
     tcase_add_test(tc, test_dump_var);
     tcase_add_test(tc, test_dump_var_ptr);
+    tcase_add_test(tc, test_dump_udphdr);
     suite_add_tcase(s, tc);
 
     return s;
