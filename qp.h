@@ -775,12 +775,12 @@ typedef unsigned long qp_militime_t;
     } while(0)
 
 #define QP_UDP_HDR_FMT \
-            "udphdr=%p sport=%hu dport=%hu len=%hu csum=%hu"
+            "udphdr=%p sport=%hu dport=%hu len=%hu csum=%#hx"
 
 #define QP_UDP_HDR_ARG(h) \
             (h), \
             ntohs((h)->source), ntohs((h)->dest), \
-            ntohl((h)->len), ntohl((h)->check)
+            ntohs((h)->len), ntohs((h)->check)
 
 #define QP_DUMP_UDP_HDR(h) QP_PRINT_LOC(QP_UDP_HDR_FMT QP_NL, QP_UDP_HDR_ARG(h))
 
