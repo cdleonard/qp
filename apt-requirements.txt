@@ -3,5 +3,6 @@ doxygen
 gcc
 graphviz
 libc-dev
+linux-headers-generic
 make
 pkg-config
