@@ -10,6 +10,10 @@ test:
   script:
     - make test
 
+kmod-build-ubuntu-generic:
+  script:
+    - make qp_kmod_test__ubuntu_generic.ko
+
 docs:
   script:
     - doxygen
