@@ -1,0 +1,5 @@
+# Ignore everything other that deliberate inclusions
+*
+!*.h
+!*.c
+!CMakeLists.txt

@@ -1,0 +1,26 @@
+#
+# Test inside a docker using cmake and clang
+#
+# Run with docker build . -f Dockerfile.cmake_clang
+#
+FROM ubuntu as base
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        dumb-init \
+        cmake \
+        clang \
+        ninja-build \
+&& rm -rf /var/lib/apt/lists/*
+
+WORKDIR /opt/qp
+
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+
+FROM base as build
+COPY qp.h CMakeLists.txt test.c ./
+RUN cmake -S . -B build -G "Ninja"
+RUN cmake --build build
+
+FROM build as test
+RUN ./build/main_test
