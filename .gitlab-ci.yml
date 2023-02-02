@@ -22,6 +22,12 @@ docs:
     paths:
       - html
 
+build-docker-cmake-clang:
+  image: docker
+  before_script: []
+  script: docker build . -f Dockerfile.cmake_clang
+  tags: [cdleonard, docker]
+
 pages:
   stage: deploy
   before_script: []
