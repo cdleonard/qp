@@ -22,8 +22,8 @@
  *      should be defined to "".
  * - #QP_RATELIMIT_INTERVAL
  * - #QP_TIME_HEADER
- * - #qp_militime_now
- * - #qp_nanotime_now
+ * - #QP_MILITIME_NOW
+ * - #QP_NANOTIME_NOW
  */
 
 /** Default interval (in miliseconds) for rate-limited prints */
@@ -143,7 +143,7 @@
 
 #if QP_TIME_HEADER == QP_TIME_HEADER_5_6
     #define QP_PRINT_LOC(str, ...) do { \
-            qp_nanotime_t nanonow = qp_nanotime_now(); \
+            QP_NANOTIME_T nanonow = QP_NANOTIME_NOW(); \
             QP_PRINT("[%05lu.%06lu] %s(%d): " str, \
                     ((unsigned long)nanonow) / 1000000000 % 100000, \
                     ((unsigned long)nanonow) / 1000 % 1000000, \
@@ -151,7 +151,7 @@
     } while (0)
 #elif QP_TIME_HEADER == QP_TIME_HEADER_4_3
     #define QP_PRINT_LOC(str, ...) do { \
-            qp_militime_t milinow = qp_militime_now(); \
+            QP_MILITIME_T milinow = QP_MILITIME_NOW(); \
             QP_PRINT("[%04lu.%03lu] %s(%d): " str, \
                     ((unsigned long)milinow) / 1000 % 10000, \
                     ((unsigned long)milinow) % 1000, \
@@ -196,52 +196,52 @@
 #endif
 
 /* Milisecond timing: */
-#define qp_militime_now_ktime() ({ \
+#define QP_MILITIME_NOW_ktime() ({ \
         u64 _nowns = ktime_get_ns(); \
         do_div(_nowns, 1000000); \
-        ((qp_militime_t)_nowns); \
+        ((QP_MILITIME_T)_nowns); \
     })
 
-#ifdef qp_militime_now
+#ifdef QP_MILITIME_NOW
     /* external */
 #elif defined(__KERNEL__)
     /* kernel default */
-    #define qp_militime_now() (((jiffies) * 1000) / HZ)
+    #define QP_MILITIME_NOW() (((jiffies) * 1000) / HZ)
 #else
     /* userspace default */
-    #define qp_militime_now() ({ \
+    #define QP_MILITIME_NOW() ({ \
             struct timeval tv; \
             gettimeofday(&tv, 0); \
-            ((qp_militime_t)tv.tv_sec * 1000lu + (tv.tv_usec / 1000)); \
+            ((QP_MILITIME_T)tv.tv_sec * 1000lu + (tv.tv_usec / 1000)); \
     })
 #endif
 
-#ifndef qp_militime_t
-#define qp_militime_t unsigned long
+#ifndef QP_MILITIME_T
+#define QP_MILITIME_T unsigned long
 #endif
 
 /* High-precission low-overhead nanosecond timing: */
-#ifdef qp_nanotime_now
+#ifdef QP_NANOTIME_NOW
     /* external */
 #elif defined(QP_PROJECT_LINUX_KERNEL)
     #ifndef QP_NO_AUTO_INCLUDE
         #include <linux/hrtimer.h>
     #endif
-    #define qp_nanotime_t s64
+    #define QP_NANOTIME_T s64
     /* Based on generic ktime. */
-    #define qp_nanotime_now() (ktime_to_ns(ktime_get_real()))
+    #define QP_NANOTIME_NOW() (ktime_to_ns(ktime_get_real()))
 #else
-    #define qp_nanotime_t unsigned long long
+    #define QP_NANOTIME_T unsigned long long
     /* userspace default */
-    #define qp_nanotime_now() ({ \
+    #define QP_NANOTIME_NOW() ({ \
             struct timeval tv; \
             gettimeofday(&tv, NULL); \
-            (((qp_nanotime_t)tv.tv_sec) * 1000000000LLU + (tv.tv_usec * 1000LLU)); \
+            (((QP_NANOTIME_T)tv.tv_sec) * 1000000000LLU + (tv.tv_usec * 1000LLU)); \
     })
 #endif
 
-#ifndef qp_nanotime_t
-#define qp_nanotime_t unsigned long
+#ifndef QP_NANOTIME_T
+#define QP_NANOTIME_T unsigned long
 #endif
 
 #ifdef QP_NO_LOCKS
@@ -304,9 +304,9 @@
  * Returns 0 or number miliseconds passed.
  */
 #define QP_RATELIMIT(delta) ({ \
-            static qp_militime_t g_last_time; \
+            static QP_MILITIME_T g_last_time; \
             static QP_LOCK_DEFINE(g_lock); \
-            qp_militime_t now_time = qp_militime_now(); \
+            QP_MILITIME_T now_time = QP_MILITIME_NOW(); \
             unsigned long delta_ms; \
             unsigned long ret = 0; \
             \
@@ -357,8 +357,8 @@
 #define QP_PER_CPU_VAR(name) __get_cpu_var(name)
 
 #define QP_RATELIMIT_PERCPU(delta) ({ \
-            static QP_DEFINE_PER_CPU(qp_militime_t, g_last_time); \
-            qp_militime_t now_time = qp_militime_now(); \
+            static QP_DEFINE_PER_CPU(QP_MILITIME_T, g_last_time); \
+            QP_MILITIME_T now_time = QP_MILITIME_NOW(); \
             unsigned long delta_ms; \
             delta_ms = now_time - QP_PER_CPU_VAR(g_last_time); \
             if (unlikely(delta_ms > delta)) { \
@@ -393,10 +393,10 @@
 #define QP_PRINT_HIST_RATELIMIT(expr, maxval, str, ...) do { \
         static QP_LONG_COUNTER_T cnt[maxval]; \
         static QP_LONG_COUNTER_T last_cnt[maxval]; \
-        static qp_militime_t last_time[maxval]; \
+        static QP_MILITIME_T last_time[maxval]; \
         unsigned int curval = expr; \
-        qp_militime_t now_time = qp_militime_now(); \
-        qp_militime_t delta_ms = now_time - last_time[curval]; \
+        QP_MILITIME_T now_time = QP_MILITIME_NOW(); \
+        QP_MILITIME_T delta_ms = now_time - last_time[curval]; \
         ++cnt[curval]; \
         if (unlikely(delta_ms > QP_RATELIMIT_INTERVAL)) { \
             QP_LONG_COUNTER_T rate = ((cnt[curval] - last_cnt[curval]) * 1000000); \
@@ -494,11 +494,11 @@
         static QP_LONG_COUNTER_T qp_profile_g_count = 0, qp_profile_g_last_count = 0; \
         static QP_LONG_COUNTER_T qp_profile_g_inst_max = 0; \
         static QP_LOCK_DEFINE(qp_profile_lock); \
-        qp_nanotime_t qp_profile_begin_ns = qp_nanotime_now();
+        QP_NANOTIME_T qp_profile_begin_ns = QP_NANOTIME_NOW();
 
 #define QP_PROFILE_REGION_END(str) do { \
         unsigned int delta_ms; \
-        qp_nanotime_t qp_profile_end_ns = qp_nanotime_now(); \
+        QP_NANOTIME_T qp_profile_end_ns = QP_NANOTIME_NOW(); \
         QP_LOCK(qp_profile_lock); \
         qp_profile_g_usage += (qp_profile_end_ns - qp_profile_begin_ns); \
         ++qp_profile_g_count; \
