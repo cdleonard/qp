@@ -196,8 +196,6 @@
 #endif
 
 /* Milisecond timing: */
-typedef unsigned long qp_militime_t;
-
 #define qp_militime_now_ktime() ({ \
         u64 _nowns = ktime_get_ns(); \
         do_div(_nowns, 1000000); \
@@ -218,6 +216,10 @@ typedef unsigned long qp_militime_t;
     })
 #endif
 
+#ifndef qp_militime_t
+#define qp_militime_t unsigned long
+#endif
+
 /* High-precission low-overhead nanosecond timing: */
 #ifdef qp_nanotime_now
     /* external */
@@ -225,17 +227,21 @@ typedef unsigned long qp_militime_t;
     #ifndef QP_NO_AUTO_INCLUDE
         #include <linux/hrtimer.h>
     #endif
-    typedef s64 qp_nanotime_t;
+    #define qp_nanotime_t s64
     /* Based on generic ktime. */
     #define qp_nanotime_now() (ktime_to_ns(ktime_get_real()))
 #else
-    typedef unsigned long long qp_nanotime_t;
+    #define qp_nanotime_t unsigned long long
     /* userspace default */
     #define qp_nanotime_now() ({ \
             struct timeval tv; \
             gettimeofday(&tv, NULL); \
             (((qp_nanotime_t)tv.tv_sec) * 1000000000LLU + (tv.tv_usec * 1000LLU)); \
     })
+#endif
+
+#ifndef qp_nanotime_t
+#define qp_nanotime_t unsigned long
 #endif
 
 #ifdef QP_NO_LOCKS
