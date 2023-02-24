@@ -26,7 +26,7 @@ build-docker-cmake-clang:
   image: docker
   before_script: []
   script: docker build . -f Dockerfile.cmake_clang
-  tags: [cdleonard, docker]
+  tags: [cdleonard,privileged-docker-access]
 
 pages:
   stage: deploy
