@@ -323,18 +323,23 @@
             ret; \
         })
 
+#ifndef QP_LONG_COUNTER_T
+/** Type for ratelimit and profile counters. Can be redefined */
+#define QP_LONG_COUNTER_T unsigned long long
+#endif
+
 /** Count calls to this location. */
 #define QP_PRINT_RATELIMIT(str, ...) do { \
-        static unsigned long long g_cnt = 0; \
-        static unsigned long long g_last_cnt; \
+        static QP_LONG_COUNTER_T g_cnt = 0; \
+        static QP_LONG_COUNTER_T g_last_cnt; \
         static QP_LOCK_DEFINE(g_lock); \
         int delta_ms; \
         QP_LOCK(g_lock); \
         ++g_cnt; \
         delta_ms = QP_RATELIMIT(QP_RATELIMIT_INTERVAL); \
         if (unlikely(delta_ms)) {\
-            unsigned long long rate = ((g_cnt - g_last_cnt) * 1000000); \
-            unsigned long long cnt = g_cnt; \
+            QP_LONG_COUNTER_T rate = ((g_cnt - g_last_cnt) * 1000000); \
+            QP_LONG_COUNTER_T cnt = g_cnt; \
             unsigned long rate_mod; \
             g_last_cnt = g_cnt; \
             QP_UNLOCK(g_lock); \
@@ -366,14 +371,14 @@
 
 /** Count calls to this location on a per-cpu basis. */
 #define QP_PRINT_RATELIMIT_PERCPU(str, ...) do { \
-        static QP_DEFINE_PER_CPU(unsigned long long, g_cnt); \
-        static QP_DEFINE_PER_CPU(unsigned long long, g_last_cnt); \
+        static QP_DEFINE_PER_CPU(QP_LONG_COUNTER_T, g_cnt); \
+        static QP_DEFINE_PER_CPU(QP_LONG_COUNTER_T, g_last_cnt); \
         int delta_ms; \
         ++QP_PER_CPU_VAR(g_cnt); \
         delta_ms = QP_RATELIMIT_PERCPU(QP_RATELIMIT_INTERVAL); \
         if (unlikely(delta_ms)) {\
-            unsigned long long rate = ((QP_PER_CPU_VAR(g_cnt) - QP_PER_CPU_VAR(g_last_cnt)) * 1000000); \
-            unsigned long long cnt = QP_PER_CPU_VAR(g_cnt); \
+            QP_LONG_COUNTER_T rate = ((QP_PER_CPU_VAR(g_cnt) - QP_PER_CPU_VAR(g_last_cnt)) * 1000000); \
+            QP_LONG_COUNTER_T cnt = QP_PER_CPU_VAR(g_cnt); \
             unsigned long rate_mod; \
             QP_PER_CPU_VAR(g_last_cnt) = QP_PER_CPU_VAR(g_cnt); \
             do_div(rate, delta_ms); \
@@ -386,15 +391,15 @@
 
 /* Count calls to this location: */
 #define QP_PRINT_HIST_RATELIMIT(expr, maxval, str, ...) do { \
-        static unsigned long long cnt[maxval]; \
-        static unsigned long long last_cnt[maxval]; \
+        static QP_LONG_COUNTER_T cnt[maxval]; \
+        static QP_LONG_COUNTER_T last_cnt[maxval]; \
         static qp_militime_t last_time[maxval]; \
         unsigned int curval = expr; \
         qp_militime_t now_time = qp_militime_now(); \
         qp_militime_t delta_ms = now_time - last_time[curval]; \
         ++cnt[curval]; \
         if (unlikely(delta_ms > QP_RATELIMIT_INTERVAL)) { \
-            unsigned long long rate = ((cnt[curval] - last_cnt[curval]) * 1000000); \
+            QP_LONG_COUNTER_T rate = ((cnt[curval] - last_cnt[curval]) * 1000000); \
             unsigned long rate_mod; \
             do_div(rate, delta_ms); \
             rate_mod = do_div(rate, 1000); \
@@ -485,9 +490,9 @@
 
 /* Micro-profiling. */
 #define QP_PROFILE_REGION_BEGIN() \
-        static unsigned long long qp_profile_g_usage = 0, qp_profile_g_last_usage = 0; \
-        static unsigned long long qp_profile_g_count = 0, qp_profile_g_last_count = 0; \
-        static unsigned long long qp_profile_g_inst_max = 0; \
+        static QP_LONG_COUNTER_T qp_profile_g_usage = 0, qp_profile_g_last_usage = 0; \
+        static QP_LONG_COUNTER_T qp_profile_g_count = 0, qp_profile_g_last_count = 0; \
+        static QP_LONG_COUNTER_T qp_profile_g_inst_max = 0; \
         static QP_LOCK_DEFINE(qp_profile_lock); \
         qp_nanotime_t qp_profile_begin_ns = qp_nanotime_now();
 
@@ -502,12 +507,12 @@
         } \
         delta_ms = QP_RATELIMIT(QP_RATELIMIT_INTERVAL); \
         if (unlikely(delta_ms)) { \
-            unsigned long long total_usage = qp_profile_g_usage; \
-            unsigned long long total_count = qp_profile_g_count; \
-            unsigned long long delta_usage = total_usage - qp_profile_g_last_usage; \
-            unsigned long long delta_count = total_count - qp_profile_g_last_count; \
-            unsigned long long call_rate, usage_per_sec, instavg, longavg; \
-            unsigned long long inst_max = qp_profile_g_inst_max; \
+            QP_LONG_COUNTER_T total_usage = qp_profile_g_usage; \
+            QP_LONG_COUNTER_T total_count = qp_profile_g_count; \
+            QP_LONG_COUNTER_T delta_usage = total_usage - qp_profile_g_last_usage; \
+            QP_LONG_COUNTER_T delta_count = total_count - qp_profile_g_last_count; \
+            QP_LONG_COUNTER_T call_rate, usage_per_sec, instavg, longavg; \
+            QP_LONG_COUNTER_T inst_max = qp_profile_g_inst_max; \
             qp_profile_g_last_count = total_count; \
             qp_profile_g_last_usage = total_usage; \
             qp_profile_g_inst_max = 0; \
