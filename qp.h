@@ -340,8 +340,8 @@
             QP_UNLOCK(g_lock); \
             do_div(rate, delta_ms); \
             rate_mod = do_div(rate, 1000); \
-            QP_PRINT_LOC("cnt=%llu rate=%llu.%03lu/s: " str, \
-                    cnt, rate, rate_mod, \
+            QP_PRINT_LOC("cnt=%llu rate=%llu.%03d/s: " str, \
+                    cnt, rate, (int)rate_mod, \
                     ## __VA_ARGS__); \
         } else { \
             QP_UNLOCK(g_lock); \
