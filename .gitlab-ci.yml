@@ -8,7 +8,7 @@ before_script:
 
 test:
   script:
-    - make test
+    - make check
 
 kmod-build-ubuntu-generic:
   script:
