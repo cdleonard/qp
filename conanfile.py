@@ -12,4 +12,7 @@ debugging highly specific issues.
 
     requires = ("libcheck/0.15.2",)
 
-    generators = "cmake"
+    generators = [
+        "cmake_paths",
+        "cmake_find_package",
+    ]

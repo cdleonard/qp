@@ -9,8 +9,8 @@ enable_testing()
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if(USE_CONAN)
-    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-    conan_basic_setup()
+    include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
+    find_package(check)
 else()
     include(FetchContent)
     # Fetch libcheck
@@ -36,12 +36,7 @@ add_executable(
 )
 
 # Add libraries
-if(USE_CONAN)
-    target_include_directories(main_test PRIVATE ${CONAN_INCLUDE_DIRS})
-    target_link_libraries(main_test ${CONAN_LIBS})
-else()
-    target_link_libraries(main_test PRIVATE Check::check)
-endif()
+target_link_libraries(main_test PRIVATE Check::check)
 
 # Add test (single program because nothing more is supported for libcheck)
 add_test(NAME main COMMAND main_test)
