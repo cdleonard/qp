@@ -15,8 +15,10 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(check)
 
-# Enable pthread explicitly (fixes libcheck link error)
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread")
+# Enable pthread explicitly (fixes libcheck link error on linux)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread")
+endif()
 
 # Include current directory
 include_directories(AFTER .)

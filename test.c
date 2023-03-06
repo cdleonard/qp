@@ -2,9 +2,11 @@
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>
+#ifdef __unix__
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <linux/udp.h>
+#endif
 
 #define QP_PRINT(str, ...) buffer_print(&pb, str, ##__VA_ARGS__)
 #include <qp.h>
@@ -47,6 +49,7 @@ START_TEST(test_dump_mac)
 }
 END_TEST
 
+#ifdef __unix__
 START_TEST(test_run_system)
 {
     struct print_buffer pb;
@@ -161,6 +164,7 @@ START_TEST(test_dump_udphdr)
     ck_assert(strstr(pb.buf, "sport=53 dport=4343 len=128 csum=0x5678"));
 }
 END_TEST
+#endif
 
 Suite *main_suite(void)
 {
@@ -168,6 +172,7 @@ Suite *main_suite(void)
     TCase *tc = tcase_create("main");
 
     tcase_add_test(tc, test_dump_mac);
+    #ifdef __unix__
     tcase_add_test(tc, test_run_system);
     tcase_add_test(tc, test_run_system_print_exit_status);
     tcase_add_test(tc, test_run_system_print_exit_signal);
@@ -176,6 +181,7 @@ Suite *main_suite(void)
     tcase_add_test(tc, test_dump_var);
     tcase_add_test(tc, test_dump_var_ptr);
     tcase_add_test(tc, test_dump_udphdr);
+    #endif
     suite_add_tcase(s, tc);
 
     return s;
