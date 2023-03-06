@@ -1,0 +1,32 @@
+#
+# Test inside a docker using cmake and conan
+#
+# Run with docker build . -f Dockerfile.conan
+#
+FROM buildpack-deps as base
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        cmake \
+        dumb-init \
+        g++ \
+        gcc \
+        make \
+        pip \
+&& rm -rf /var/lib/apt/lists/*
+
+RUN pip install --user 'conan<2'
+ENV PATH="/root/.local/bin:${PATH}"
+RUN conan --version
+
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+
+FROM base as build
+WORKDIR /opt/qp
+COPY qp.h conanfile.txt CMakeLists.txt test.c ./
+RUN mkdir -p build && cd build && conan install .. --build=missing
+RUN cmake -DUSE_CONAN=1 -S . -B build
+RUN cmake --build build
+
+FROM build as test
+RUN ./build/bin/main_test

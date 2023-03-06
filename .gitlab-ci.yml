@@ -28,6 +28,12 @@ build-docker-cmake-clang:
   script: docker build . -f Dockerfile.cmake_clang
   tags: [cdleonard,privileged-docker-access]
 
+build-docker-conan:
+  image: docker
+  before_script: []
+  script: docker build . -f Dockerfile.conan
+  tags: [cdleonard,privileged-docker-access]
+
 pages:
   stage: deploy
   before_script: []

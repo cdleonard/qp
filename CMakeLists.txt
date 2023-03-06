@@ -5,15 +5,21 @@ cmake_minimum_required(VERSION 3.14)
 project(qp)
 
 enable_testing()
-include(FetchContent)
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Fetch libcheck
-FetchContent_Declare(
-    check
-    URL https://github.com/libcheck/check/archive/refs/tags/0.15.2.zip
-)
-FetchContent_MakeAvailable(check)
+if(USE_CONAN)
+    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    conan_basic_setup()
+else()
+    include(FetchContent)
+    # Fetch libcheck
+    FetchContent_Declare(
+        check
+        URL https://github.com/libcheck/check/archive/refs/tags/0.15.2.zip
+    )
+    FetchContent_MakeAvailable(check)
+endif()
 
 # Enable pthread explicitly (fixes libcheck link error on linux)
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
@@ -28,4 +34,11 @@ add_executable(
     main_test
     test.c
 )
-target_link_libraries(main_test PRIVATE Check::check)
+
+# Add libraries
+if(USE_CONAN)
+    target_include_directories(main_test PRIVATE ${CONAN_INCLUDE_DIRS})
+    target_link_libraries(main_test ${CONAN_LIBS})
+else()
+    target_link_libraries(main_test PRIVATE Check::check)
+endif()
