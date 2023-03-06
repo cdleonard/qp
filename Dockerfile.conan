@@ -29,4 +29,4 @@ RUN cmake -DUSE_CONAN=1 -S . -B build
 RUN cmake --build build
 
 FROM build as test
-RUN ./build/bin/main_test
+RUN cd build && ctest -V

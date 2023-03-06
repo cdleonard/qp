@@ -12,4 +12,7 @@ mkdir -p "$OUT_DIR"
 cmake -DUSE_CONAN=1 -S . -B "$OUT_DIR"
 cmake --build "$OUT_DIR"
 
-"$OUT_DIR/bin/main_test" "$@"
+(
+    cd "$OUT_DIR"
+    ctest -V
+)

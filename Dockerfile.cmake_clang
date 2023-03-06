@@ -23,4 +23,4 @@ RUN cmake -S . -B build -G "Ninja"
 RUN cmake --build build
 
 FROM build as test
-RUN ./build/main_test
+RUN cd build && ctest -V

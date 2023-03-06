@@ -42,3 +42,6 @@ if(USE_CONAN)
 else()
     target_link_libraries(main_test PRIVATE Check::check)
 endif()
+
+# Add test (single program because nothing more is supported for libcheck)
+add_test(NAME main COMMAND main_test)
