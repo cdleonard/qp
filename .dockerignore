@@ -3,4 +3,4 @@
 !*.h
 !*.c
 !CMakeLists.txt
-!conanfile.txt
+!conanfile.py
