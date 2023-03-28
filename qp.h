@@ -142,26 +142,36 @@
 #endif
 
 #if QP_TIME_HEADER == QP_TIME_HEADER_5_6
-    #define QP_PRINT_LOC(str, ...) do { \
-            QP_NANOTIME_T nanonow = QP_NANOTIME_NOW(); \
-            QP_PRINT("[%05lu.%06lu] %s(%d): " str, \
-                    ((unsigned long)nanonow) / 1000000000 % 100000, \
-                    ((unsigned long)nanonow) / 1000 % 1000000, \
-                    __func__, __LINE__, ## __VA_ARGS__); \
-    } while (0)
+    #define QP_TIME_HEADER_INI \
+        QP_NANOTIME_T nanonow = QP_NANOTIME_NOW();
+    #define QP_TIME_HEADER_FMT \
+        "[%05lu.%06lu] "
+    #define QP_TIME_HEADER_ARG \
+        ((unsigned long)nanonow) / 1000000000 % 100000, \
+        ((unsigned long)nanonow) / 1000 % 1000000,
+    #define QP_TIME_HEADER_LEN 15
 #elif QP_TIME_HEADER == QP_TIME_HEADER_4_3
-    #define QP_PRINT_LOC(str, ...) do { \
-            QP_MILITIME_T milinow = QP_MILITIME_NOW(); \
-            QP_PRINT("[%04lu.%03lu] %s(%d): " str, \
-                    ((unsigned long)milinow) / 1000 % 10000, \
-                    ((unsigned long)milinow) % 1000, \
-                    __func__, __LINE__, ## __VA_ARGS__); \
-    } while (0)
+    #define QP_TIME_HEADER_INI \
+        QP_MILITIME_T milinow = QP_MILITIME_NOW();
+    #define QP_TIME_HEADER_FMT \
+        "[%04lu.%03lu] "
+    #define QP_TIME_HEADER_ARG \
+        ((unsigned long)milinow) / 1000 % 10000, \
+        ((unsigned long)milinow) % 1000,
+    #define QP_TIME_HEADER_LEN 11
 #else
-    #define QP_PRINT_LOC(str, ...) \
-            QP_PRINT("%s(%d): " str, \
-                    __func__, __LINE__, ## __VA_ARGS__)
+    #define QP_TIME_HEADER_INI
+    #define QP_TIME_HEADER_FMT ""
+    #define QP_TIME_HEADER_ARG
+    #define QP_TIME_HEADER_LEN 0
 #endif
+
+#define QP_PRINT_LOC(str, ...) do { \
+        QP_TIME_HEADER_INI \
+        QP_PRINT(QP_TIME_HEADER_FMT "%s(%d): " str, \
+                QP_TIME_HEADER_ARG \
+                __func__, __LINE__, ## __VA_ARGS__); \
+    } while (0)
 
 /** Print source code location without any other message. */
 #define QP_TRACE() QP_PRINT_LOC("trace" QP_NL)
