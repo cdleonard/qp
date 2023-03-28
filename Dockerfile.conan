@@ -23,7 +23,7 @@ ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
 FROM base as build
 WORKDIR /opt/qp
-COPY qp.h conanfile.py CMakeLists.txt test.c ./
+COPY qp.h conanfile.py CMakeLists.txt test*.c test.h ./
 RUN mkdir -p build && cd build && conan install .. --build=missing
 RUN cmake -DUSE_CONAN=1 -S . -B build
 RUN cmake --build build

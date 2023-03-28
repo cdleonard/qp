@@ -18,7 +18,7 @@ WORKDIR /opt/qp
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
 FROM base as build
-COPY qp.h CMakeLists.txt test.c ./
+COPY qp.h CMakeLists.txt test*.c test.h ./
 RUN cmake -S . -B build -G "Ninja"
 RUN cmake --build build
 
