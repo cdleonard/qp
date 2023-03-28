@@ -1,4 +1,3 @@
-#include <check.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -7,16 +6,10 @@
 #include <arpa/inet.h>
 #include <linux/udp.h>
 #endif
+#include "test.h"
 
 #define QP_PRINT(str, ...) buffer_print(&pb, str, ##__VA_ARGS__)
 #include <qp.h>
-
-#define PRINT_BUFFER_SIZE 1234
-struct print_buffer
-{
-    char buf[PRINT_BUFFER_SIZE];
-    char *curptr;
-};
 
 void print_buffer_init(struct print_buffer *pb)
 {

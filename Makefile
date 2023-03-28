@@ -8,7 +8,7 @@ all: check docs
 	check \
 	docs \
 
-test: test.c qp.h
+test: test.c test.h qp.h
 	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $@ \
 		$(shell pkg-config --libs --cflags check)
 
