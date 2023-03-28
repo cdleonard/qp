@@ -34,6 +34,7 @@ add_executable(
     main_test
     test.c
     test_time_header_4_3.c
+    test_time_header_5_6.c
 )
 
 # Add libraries
