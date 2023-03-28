@@ -187,6 +187,8 @@ int main(void)
 
     sr = srunner_create(NULL);
     srunner_add_suite(sr, suite_create_main());
+    srunner_add_suite(sr, suite_create_time_header_4_3());
+
     srunner_run_all(sr, CK_NORMAL);
     ntests_failed = srunner_ntests_failed(sr);
 

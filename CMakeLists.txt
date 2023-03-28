@@ -33,6 +33,7 @@ include_directories(AFTER .)
 add_executable(
     main_test
     test.c
+    test_time_header_4_3.c
 )
 
 # Add libraries

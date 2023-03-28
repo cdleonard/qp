@@ -8,8 +8,10 @@ all: check docs
 	check \
 	docs \
 
-test: test.c test.h qp.h
-	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $@ \
+TEST_SRC_FILES=$(wildcard test*.c)
+
+test: $(TEST_SRC_FILES) test.h qp.h
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(TEST_SRC_FILES) -o $@ \
 		$(shell pkg-config --libs --cflags check)
 
 check: test
