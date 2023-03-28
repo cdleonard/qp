@@ -16,6 +16,7 @@ START_TEST(test_time_header_5_6)
     ck_assert_int_eq(pb.buf[0], '[');
     ck_assert_int_eq(pb.buf[13], ']');
     ck_assert_int_eq(pb.buf[14], ' ');
+    ck_assert_int_eq(pb.buf[QP_TIME_HEADER_LEN - 1], ' ');
     ck_assert(strstr(pb.buf, "test_time_header_5_6"));
     ck_assert(strstr(pb.buf, "hello\n"));
 }
