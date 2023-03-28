@@ -166,7 +166,7 @@ START_TEST(test_dump_udphdr)
 END_TEST
 #endif
 
-Suite *main_suite(void)
+Suite *suite_create_main(void)
 {
     Suite *s = suite_create("main");
     TCase *tc = tcase_create("main");
@@ -190,12 +190,10 @@ Suite *main_suite(void)
 int main(void)
 {
     int ntests_failed;
-    Suite *s;
     SRunner *sr;
 
-    s = main_suite();
-    sr = srunner_create(s);
-
+    sr = srunner_create(NULL);
+    srunner_add_suite(sr, suite_create_main());
     srunner_run_all(sr, CK_NORMAL);
     ntests_failed = srunner_ntests_failed(sr);
 
