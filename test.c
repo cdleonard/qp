@@ -42,6 +42,18 @@ START_TEST(test_dump_mac)
 }
 END_TEST
 
+START_TEST(test_dump_hex)
+{
+    uint8_t hex[8] = {0x01, 0x02, 0x03, 0x04, 0xaa, 0xbb, 0xcc, 0xdd};
+    struct print_buffer pb;
+
+    print_buffer_init(&pb);
+    QP_DUMP_HEX_BUFFER_PRETTY(hex, 8, 4, 2);
+    ck_assert(strstr(pb.buf, "0102 0304\n"));
+    ck_assert(strstr(pb.buf, "aabb ccdd\n"));
+}
+END_TEST
+
 #ifdef __unix__
 START_TEST(test_run_system)
 {
@@ -165,6 +177,7 @@ Suite *suite_create_main(void)
     TCase *tc = tcase_create("main");
 
     tcase_add_test(tc, test_dump_mac);
+    tcase_add_test(tc, test_dump_hex);
     #ifdef __unix__
     tcase_add_test(tc, test_run_system);
     tcase_add_test(tc, test_run_system_print_exit_status);

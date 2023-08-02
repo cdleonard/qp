@@ -598,18 +598,26 @@
         } \
     } while (0)
 
-/** Dump a hex buffer nicely with a header and up to 16 bytes per line */
-#define QP_DUMP_HEX_BUFFER(buf, len) do { \
+/** Dump a hex buffer nicely with a header
+ *  @param buf Buffer to dump
+ *  @param len Length of the buffer in bytes
+ *  @param eol_count Insert EOL every this many bytes
+ *  @param space_count Insert space every this many bytes
+ */
+#define QP_DUMP_HEX_BUFFER_PRETTY(buf, len, eol_count, space_count) do { \
         unsigned int idx; \
         QP_PRINT_LOC("DUMP %u bytes from %p:", (unsigned int)(len), (buf)); \
         for (idx = 0; idx < (unsigned int)(len); ++idx) { \
-            if (idx % 16 == 0) { \
+            if (idx % (eol_count) == 0) { \
                 QP_PRINT(QP_CONT "\nDUMP %p:", ((unsigned char*)(buf)) + idx); \
             } \
-            QP_PRINT(QP_CONT "%s%02x", ((idx % 8) == 0) ? "  " : " ", (int)((unsigned char*)(buf))[idx]); \
+            QP_PRINT(QP_CONT "%s%02x", ((idx % space_count) == 0) ? " " : "", (int)((unsigned char*)(buf))[idx]); \
         } \
         QP_PRINT(QP_CONT "\n"); \
     } while (0)
+
+/** Dump a hex buffer nicely with a header and up to 16 bytes per line */
+#define QP_DUMP_HEX_BUFFER(buf, len) QP_DUMP_HEX_BUFFER(buf, len, 16, 4);
 
 /** Dump struct msghdr and iov pointers
  *
