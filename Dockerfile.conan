@@ -13,10 +13,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         gcc \
         make \
         pip \
+        python3-venv \
 && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --user 'conan<2'
-ENV PATH="/root/.local/bin:${PATH}"
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:${PATH}"
+RUN pip install 'conan<2'
 RUN conan --version
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
