@@ -2,6 +2,7 @@
 // Check QP_TIME_HEADER_4_3
 //
 #include "test.h"
+#include <sys/time.h>
 
 #define QP_TIME_HEADER QP_TIME_HEADER_4_3
 #define QP_PRINT(str, ...) buffer_print(&pb, str, ##__VA_ARGS__)
