@@ -54,6 +54,20 @@ START_TEST(test_dump_hex)
 }
 END_TEST
 
+START_TEST(test_dump_hex_buffer)
+{
+    uint8_t hex[] = {
+        0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+        0x09, 0x10, 0x11, 0x12
+    };
+    struct print_buffer pb;
+
+    print_buffer_init(&pb);
+    QP_DUMP_HEX_BUFFER(hex, sizeof(hex));
+    ck_assert(strstr(pb.buf, "01020304 05060708 09101112\n"));
+}
+END_TEST
+
 #ifdef __unix__
 START_TEST(test_run_system)
 {
@@ -178,6 +192,7 @@ Suite *suite_create_main(void)
 
     tcase_add_test(tc, test_dump_mac);
     tcase_add_test(tc, test_dump_hex);
+    tcase_add_test(tc, test_dump_hex_buffer);
     #ifdef __unix__
     tcase_add_test(tc, test_run_system);
     tcase_add_test(tc, test_run_system_print_exit_status);

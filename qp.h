@@ -617,7 +617,7 @@
     } while (0)
 
 /** Dump a hex buffer nicely with a header and up to 16 bytes per line */
-#define QP_DUMP_HEX_BUFFER(buf, len) QP_DUMP_HEX_BUFFER(buf, len, 16, 4);
+#define QP_DUMP_HEX_BUFFER(buf, len) QP_DUMP_HEX_BUFFER_PRETTY(buf, len, 16, 4);
 
 /** Dump struct msghdr and iov pointers
  *
