@@ -1,7 +1,14 @@
 #include <linux/kernel.h>
 #include <linux/version.h>
 #include <linux/module.h>
+#include <linux/skbuff.h>
 #include "qp.h"
+
+__maybe_unused static void qp_dump_skb_compile_test(void)
+{
+    struct sk_buff *skb = NULL;
+    QP_DUMP_SKB(skb, true);
+}
 
 static int qp_kmod_test_init(void)
 {

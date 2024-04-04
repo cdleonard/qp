@@ -1046,4 +1046,32 @@
         ret; \
     })
 
+#define QP_DUMP_SKB_POINTERS(skb) QP_PRINT_LOC(\
+        "skb=%px head=%px headroom=%d data=%px tail=%px tailroom=%d end=%px len=%d headlen=%d data_len=%d\n", \
+        (skb), \
+        (skb)->head, skb_headroom(skb), (skb)->data, \
+        skb_tail_pointer(skb), skb_tailroom(skb), skb_end_pointer(skb), \
+        (skb)->len, skb_headlen(skb), (skb)->data_len)
+
+#define QP_DUMP_SKB_HEADER_POINTERS(skb) QP_PRINT_LOC(\
+        "skb=%px" \
+        " data=%px" \
+        " mac header=%px offset=%d mac_len=%d%s" \
+        " network header=%px offset=%d len=%d" \
+        " transport header=%px offset=%d" \
+        "\n", \
+        (skb), (skb)->data, \
+        skb_mac_header(skb), (int)(skb_mac_header(skb) - (skb)->data), (int)(skb)->mac_len, \
+        skb_mac_header_was_set(skb) ? "" : " UNSET", \
+        skb_network_header(skb), (int)skb_network_offset(skb), (int)skb_network_header_len(skb), \
+        skb_transport_header(skb), (int)skb_transport_offset(skb))
+
+#define QP_DUMP_SKB(skb, include_data) do { \
+        QP_DUMP_SKB_POINTERS(skb); \
+        QP_DUMP_SKB_HEADER_POINTERS(skb); \
+        if ((include_data)) { \
+            QP_DUMP_HEX_BUFFER((skb)->data, skb_headlen(skb)); \
+        } \
+    } while (0)
+
 #endif // QP_HEADER_INCLUDED
