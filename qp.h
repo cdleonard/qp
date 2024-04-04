@@ -166,9 +166,18 @@
     #define QP_TIME_HEADER_LEN 0
 #endif
 
+/**
+ * Extra marker for QP_PRINT_LOC
+ *
+ * This default to an empty string but can be set to make prints stand out
+ */
+#ifndef QP_PRINT_LOC_MARKER
+    #define QP_PRINT_LOC_MARKER ""
+#endif
+
 #define QP_PRINT_LOC(str, ...) do { \
         QP_TIME_HEADER_INI \
-        QP_PRINT(QP_TIME_HEADER_FMT "%s(%d): " str, \
+        QP_PRINT(QP_TIME_HEADER_FMT QP_PRINT_LOC_MARKER "%s(%d): " str, \
                 QP_TIME_HEADER_ARG \
                 __func__, __LINE__, ## __VA_ARGS__); \
     } while (0)
