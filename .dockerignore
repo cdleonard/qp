@@ -4,3 +4,4 @@
 !*.c
 !CMakeLists.txt
 !conanfile.py
+!apt-requirements.txt

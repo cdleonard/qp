@@ -1,0 +1,9 @@
+services:
+  ubuntu:
+    image: registry.gitlab.com/cdleonard/private-scripts/qp:${DOCKER_IMAGE_TAG:-latest}
+    build:
+      context: .
+      dockerfile: Dockerfile.ubuntu
+    volumes:
+      - "./:/workdir"
+    working_dir: /workdir
