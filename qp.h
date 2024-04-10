@@ -771,13 +771,25 @@
     } while(0)
 
 #define QP_DUMP_IPV4_HDR(h) QP_PRINT_LOC(\
-            "iphdr=%p version=%u protocol=%hx headerlen=%u tot_len=%hu" \
+            "iphdr=%p version=%u" \
+            " hdr_len=%u" \
+            " tos=%hhx" \
+            " tot_len=%hu" \
+            " id=%04hx frag_off=%04hx" \
+            " ttl=%hhx " \
+            " protocol=%hhx " \
             " check=%02hx" \
             " saddr=" QP_IPV4_FMT \
             " daddr=" QP_IPV4_FMT \
             "\n", \
-            (h), (h)->version, ntohs((h)->protocol), \
-            (h)->ihl, ntohs((h)->tot_len), \
+            (h), (h)->version, \
+            (h)->ihl, \
+            (h)->tos, \
+            ntohs((h)->tot_len), \
+            ntohs((h)->id), \
+            ntohs((h)->frag_off), \
+            (h)->ttl, \
+            (h)->protocol, \
             (h)->check, \
             QP_IPV4_ARG(&(h)->saddr), \
             QP_IPV4_ARG(&(h)->daddr))
