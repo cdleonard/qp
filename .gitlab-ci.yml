@@ -1,5 +1,9 @@
 # Reference documentation: https://docs.gitlab.com/ee/ci/yaml/README.html
 ---
+variables:
+  # Unique name for docker-compose
+  COMPOSE_PROJECT_NAME: gitlab-$CI_PROJECT_PATH_SLUG-$CI_CONCURRENT_PROJECT_ID
+
 image: ubuntu
 
 before_script:
@@ -21,6 +25,12 @@ docs:
     expose_as: docs
     paths:
       - html
+
+build-docker-compose-make-check:
+  image: docker:cli
+  before_script: []
+  script: docker compose run --build --rm ubuntu make check
+  tags: [cdleonard,privileged-docker-access]
 
 build-docker-cmake-clang:
   image: docker:cli
