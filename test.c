@@ -5,6 +5,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <linux/udp.h>
+#include <linux/ip.h>
+#include <linux/ipv6.h>
 #endif
 #include "test.h"
 
@@ -123,6 +125,28 @@ START_TEST(test_dump_ipv6)
 }
 END_TEST
 
+START_TEST(test_dump_ipv4_hdr)
+{
+    struct print_buffer pb;
+    struct iphdr iph;
+    memset(&iph, 0, sizeof(iph));
+
+    print_buffer_init(&pb);
+    QP_DUMP_IPV4_HDR(&iph);
+}
+END_TEST
+
+START_TEST(test_dump_ipv6_hdr)
+{
+    struct print_buffer pb;
+    struct ipv6hdr ip6h;
+    memset(&ip6h, 0, sizeof(ip6h));
+
+    print_buffer_init(&pb);
+    QP_DUMP_IPV6_HDR(&ip6h);
+}
+END_TEST
+
 START_TEST(test_dump_var)
 {
     struct print_buffer pb;
@@ -199,6 +223,8 @@ Suite *suite_create_main(void)
     tcase_add_test(tc, test_run_system_print_exit_signal);
     tcase_add_test(tc, test_dump_ipv4);
     tcase_add_test(tc, test_dump_ipv6);
+    tcase_add_test(tc, test_dump_ipv4_hdr);
+    tcase_add_test(tc, test_dump_ipv6_hdr);
     tcase_add_test(tc, test_dump_var);
     tcase_add_test(tc, test_dump_var_ptr);
     tcase_add_test(tc, test_dump_udphdr);
